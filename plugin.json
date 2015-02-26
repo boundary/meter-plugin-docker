@@ -1,0 +1,30 @@
+{
+    "description": "Docker Boundary Plugin",
+    "icon" : "icon.png",
+    "command": "boundary-meter index.lua",
+    "metrics" : ["DOCKER_TOTAL_CPU_USAGE",
+                 "DOCKER_TOTAL_MEMORY_USAGE",
+                 "DOCKER_MEAN_MEMORY_USAGE",
+                 "DOCKER_MAX_MEMORY_USAGE",
+                 "DOCKER_MIN_MEMORY_USAGE",
+                 "DOCKER_NETWORK_RX",
+                 "DOCKER_NETWORK_TX"],
+    "postExtract" : "",
+    "paramSchema": [
+        {
+            "title": "HOST",
+            "name": "host",
+            "description": "The Docker Daemon hostname",
+            "type": "string",
+            "default": "localhost",
+        },
+        {
+            "title" : "Port",
+            "name" : "port",
+            "description" : "The Docker Daemon port",
+            "type" : "integer",
+            "default" : 80
+        },
+
+    ]
+}
