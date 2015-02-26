@@ -1,7 +1,7 @@
 {
     "description": "Docker Boundary Plugin",
     "icon" : "icon.png",
-    "command": "boundary-meter index.lua",
+    "command": "boundary-meter init.lua",
     "metrics" : ["DOCKER_TOTAL_CPU_USAGE",
                  "DOCKER_TOTAL_MEMORY_USAGE",
                  "DOCKER_MEAN_MEMORY_USAGE",
