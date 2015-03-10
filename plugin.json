@@ -2,21 +2,25 @@
     "description": "Docker Boundary Plugin",
     "icon" : "icon.png",
     "command": "boundary-meter init.lua",
-    "metrics" : ["DOCKER_TOTAL_CPU_USAGE",
-                 "DOCKER_TOTAL_MEMORY_USAGE",
-                 "DOCKER_MEAN_MEMORY_USAGE",
-                 "DOCKER_MAX_MEMORY_USAGE",
-                 "DOCKER_MIN_MEMORY_USAGE",
-                 "DOCKER_NETWORK_RX",
-                 "DOCKER_NETWORK_TX"],
     "postExtract" : "",
+
+    "metrics" : [
+        "DOCKER_TOTAL_CPU_USAGE",
+        "DOCKER_TOTAL_MEMORY_USAGE",
+        "DOCKER_MEAN_MEMORY_USAGE",
+        "DOCKER_MAX_MEMORY_USAGE",
+        "DOCKER_MIN_MEMORY_USAGE",
+        "DOCKER_NETWORK_RX",
+        "DOCKER_NETWORK_TX"
+    ],
+
     "paramSchema": [
         {
             "title": "HOST",
             "name": "host",
             "description": "The Docker Daemon hostname",
             "type": "string",
-            "default": "localhost",
+            "default": "localhost"
         },
         {
             "title" : "Port",
@@ -25,6 +29,13 @@
             "type" : "integer",
             "default" : 80
         },
-
+        {
+            "title": "Poll Interval",
+            "name": "pollInterval",
+            "description": "The Poll Interval to call the command in milliseconds. Defaults to 1000 milliseconds",
+            "type": "string",
+            "default": 1000,
+            "required": false
+        }
     ]
 }
