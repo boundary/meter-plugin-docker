@@ -12,9 +12,16 @@ https://docs.docker.com/reference/api/docker_remote_api/
 |:----------|:-----:|:-------:|:-------:|:----:|
 | Supported |   v   |    v    |    v    |  v   |
 
-|  Runtime | LUA/luvit |
-|:---------|:-------:|:------:|:----:|
-| Required |    +    |        |      |
+#### Boundary Meter Versions V4.0 Or Greater REQUIRED
+
+To get the new meter:
+
+    curl -fsS \
+        -d "{\"token\":\"<your API token here>\"}" \
+        -H "Content-Type: application/json" \
+        "https://meter.boundary.com/setup_meter" > setup_meter.sh
+    chmod +x setup_meter.sh
+    ./setup_meter.sh
 
 ### Plugin Setup
 
