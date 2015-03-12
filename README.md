@@ -5,8 +5,9 @@ Collects metrics from a docker daemon using the stats api.
 
 https://docs.docker.com/reference/api/docker_remote_api/
 
+## Prerequisites
 
-### Prerequisites
+### Supported OS
 
 |     OS    | Linux | Windows | SmartOS | OS X |
 |:----------|:-----:|:-------:|:-------:|:----:|
