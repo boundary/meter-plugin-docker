@@ -22,7 +22,7 @@ if (boundary.param ~= nil) then
 end
 
 function berror(err)
-  if err then print(string.format("%s ERROR: %s", __pgk, tostring(err))) return err end
+  if err then process.stderr:write(string.format("%s ERROR: %s", __pgk, tostring(err))) return err end
 end
 
 local doreq = function(host, port, path, cb)
