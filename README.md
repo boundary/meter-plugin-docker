@@ -1,5 +1,4 @@
-Boundary Docker Plugin
--------------------------
+# Boundary Docker Plugin
 
 Collects metrics from a docker daemon using the stats api.
 
