@@ -122,18 +122,22 @@ timer.setInterval(pollInterval, function ()
       local total_tx_bytes = 0
 
       for k, v in pairs(stats) do
-        print(string.format('DOCKER_TOTAL_CPU_USAGE %.2f %s', v.cpu_stats.cpu_usage.total_usage/10^12, k))
-        for i=0, #v.cpu_stats.cpu_usage.percpu_usage do
-            print(string.format('DOCKER_TOTAL_CPU_USAGE %.2f %s-C%d', v.cpu_stats.cpu_usage.percpu_usage[i]/10^12, k, i))
+        if (v.cpu_stats != nil and v.cpu_stats.cpu_usage != nil) do
+          print(string.format('DOCKER_TOTAL_CPU_USAGE %.2f %s', v.cpu_stats.cpu_usage.total_usage/10^12, k))
+          for i=0, #v.cpu_stats.cpu_usage.percpu_usage do
+              print(string.format('DOCKER_TOTAL_CPU_USAGE %.2f %s-C%d', v.cpu_stats.cpu_usage.percpu_usage[i]/10^12, k, i))
+          end
+          print(string.format('DOCKER_TOTAL_MEMORY_USAGE %s %s', toGB(v.memory_stats.usage), k))
+          print(string.format('DOCKER_NETWORK_RX %s %s', toGB(v.network.rx_bytes), k))
+          print(string.format('DOCKER_NETWORK_TX %s %s', toGB(v.network.tx_bytes), k))
+          table.insert(_mem, v.memory_stats.usage)
+          total_memory_usage = total_memory_usage + v.memory_stats.usage
+          total_cpu_usage    = total_cpu_usage + v.cpu_stats.cpu_usage.total_usage
+          total_rx_bytes     = total_rx_bytes + v.network.rx_bytes
+          total_tx_bytes     = total_tx_bytes + v.network.tx_bytes
+        else
+          return berror("Data mismatch" .. json:encode_pretty(v))
         end
-        print(string.format('DOCKER_TOTAL_MEMORY_USAGE %s %s', toGB(v.memory_stats.usage), k))
-        print(string.format('DOCKER_NETWORK_RX %s %s', toGB(v.network.rx_bytes), k))
-        print(string.format('DOCKER_NETWORK_TX %s %s', toGB(v.network.tx_bytes), k))
-        table.insert(_mem, v.memory_stats.usage)
-        total_memory_usage = total_memory_usage + v.memory_stats.usage
-        total_cpu_usage    = total_cpu_usage + v.cpu_stats.cpu_usage.total_usage
-        total_rx_bytes     = total_rx_bytes + v.network.rx_bytes
-        total_tx_bytes     = total_tx_bytes + v.network.tx_bytes
       end
 
       local max, min = maxmin(_mem)
