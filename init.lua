@@ -130,7 +130,7 @@ timer.setInterval(pollInterval, function ()
       end
 
       local max, min = maxmin(_mem)
-      print(string.format('DOCKER_TOTAL_CPU_USAGE %.2f%% %s', total_cpu_usage/10^12, source))
+      print(string.format('DOCKER_TOTAL_CPU_USAGE %.2f %s', total_cpu_usage/10^12, source))
       print(string.format('DOCKER_TOTAL_MEMORY_USAGE %s %s', toGB(total_memory_usage), source))
       print(string.format('DOCKER_MEAN_MEMORY_USAGE %s %s', toGB(mean(_mem)), source))
       print(string.format('DOCKER_MAX_MEMORY_USAGE %s %s', toGB(max), source))
