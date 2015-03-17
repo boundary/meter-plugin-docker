@@ -54,7 +54,7 @@ function round(val, decimal)
 end
 
 function toGB(val)
-  return string.format("%s GB", round(val/1024^3, 3))
+  return string.format("%d", type(val) == 'number' and round(val/1024^3, 3) or 0)
 end
 
 function mean(t)
