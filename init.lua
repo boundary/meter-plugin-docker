@@ -90,10 +90,16 @@ timer.setInterval(pollInterval, function ()
     if berror(err) then return end
     local containers = json:decode(body)
     local c = {}
-    for _, container in ipairs(containers) do table.insert(c, container.Id) end
+    local n = {}
+    for _, container in ipairs(containers) do
+      table.insert(c, container.Id)
+      table.insert(n, string.sub(container.Names, 2, -1))
+    end
     local stats = {}
+    local count = 0
     -- retrieve stats for container
     async.forEach(c, function(x, callback)
+      count = count + 1
       local req = http.request({host = host, port = port, path = "/containers/".. x.. "/stats"}, function (res)
         res:on("error", function(err)
           return berror("Error while receiving a response: " .. tostring(err))
@@ -101,7 +107,7 @@ timer.setInterval(pollInterval, function ()
         res:on("data", function (chunk)
           local d = json:decode(chunk)
           -- streaming response, kill on first sight
-          stats[x] = d
+          stats[n[count]] = d
           res:destroy()
           callback()
           return
@@ -122,10 +128,12 @@ timer.setInterval(pollInterval, function ()
       local total_tx_bytes = 0
 
       for k, v in pairs(stats) do
-        if (v.cpu_stats != nil and v.cpu_stats.cpu_usage != nil) do
+        if (type(v.cpu_stats) != nil and type(v.cpu_stats.cpu_usage) != nil) do
           print(string.format('DOCKER_TOTAL_CPU_USAGE %.2f %s', v.cpu_stats.cpu_usage.total_usage/10^12, k))
-          for i=0, #v.cpu_stats.cpu_usage.percpu_usage do
+          if (type(v.cpu_stats.cpu_usage.percpu_usage) == table) do
+            for i=0, #v.cpu_stats.cpu_usage.percpu_usage do
               print(string.format('DOCKER_TOTAL_CPU_USAGE %.2f %s-C%d', v.cpu_stats.cpu_usage.percpu_usage[i]/10^12, k, i))
+            end
           end
           print(string.format('DOCKER_TOTAL_MEMORY_USAGE %s %s', toGB(v.memory_stats.usage), k))
           print(string.format('DOCKER_NETWORK_RX %s %s', toGB(v.network.rx_bytes), k))
