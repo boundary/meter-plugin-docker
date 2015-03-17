@@ -123,7 +123,7 @@ timer.setInterval(pollInterval, function ()
 
       for k, v in pairs(stats) do
         print(string.format('DOCKER_TOTAL_CPU_USAGE %.2f %s', v.cpu_stats.cpu_usage.total_usage/10^12, k))
-        for i=0, #table.getn(v.cpu_stats.cpu_usage.percpu_usage) do
+        for i=0, #v.cpu_stats.cpu_usage.percpu_usage do
             print(string.format('DOCKER_TOTAL_CPU_USAGE %.2f %s-C%d', v.cpu_stats.cpu_usage.percpu_usage[i]/10^12, k, i))
         end
         print(string.format('DOCKER_TOTAL_MEMORY_USAGE %s %s', toGB(v.memory_stats.usage), k))
