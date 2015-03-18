@@ -54,7 +54,7 @@ function round(val, decimal)
 end
 
 function toGB(val)
-  return string.format("%d", type(val) == 'number' and round(val/1024^3, 3) or 0)
+  return string.format("%.3f", type(val) == 'number' and round(val/1024^3, 3) or 0)
 end
 
 function mean(t)
@@ -128,11 +128,11 @@ timer.setInterval(pollInterval, function ()
       local total_tx_bytes = 0
 
       for k, v in pairs(stats) do
-        if (type(v.cpu_stats) != nil and type(v.cpu_stats.cpu_usage) != nil) do
-          print(string.format('DOCKER_TOTAL_CPU_USAGE %.2f %s', v.cpu_stats.cpu_usage.total_usage/10^12, k))
-          if (type(v.cpu_stats.cpu_usage.percpu_usage) == table) do
-            for i=0, #v.cpu_stats.cpu_usage.percpu_usage do
-              print(string.format('DOCKER_TOTAL_CPU_USAGE %.2f %s-C%d', v.cpu_stats.cpu_usage.percpu_usage[i]/10^12, k, i))
+        if (type(v.cpu_stats) ~= nil and type(v.cpu_stats.cpu_usage) ~= nil) do
+          print(string.format('DOCKER_TOTAL_CPU_USAGE %.3f %s', v.cpu_stats.cpu_usage.total_usage/10^12, k))
+          if (type(v.cpu_stats.cpu_usage.percpu_usage) == 'table') do
+            for i=1, table.getn(v.cpu_stats.cpu_usage.percpu_usage) do
+              print(string.format('DOCKER_TOTAL_CPU_USAGE %.3f %s-C%d', v.cpu_stats.cpu_usage.percpu_usage[i]/10^12, k, i))
             end
           end
           print(string.format('DOCKER_TOTAL_MEMORY_USAGE %s %s', toGB(v.memory_stats.usage), k))
@@ -149,7 +149,7 @@ timer.setInterval(pollInterval, function ()
       end
 
       local max, min = maxmin(_mem)
-      print(string.format('DOCKER_TOTAL_CPU_USAGE %.2f %s', total_cpu_usage/10^12, source))
+      print(string.format('DOCKER_TOTAL_CPU_USAGE %.3f %s', total_cpu_usage/10^12, source))
       print(string.format('DOCKER_TOTAL_MEMORY_USAGE %s %s', toGB(total_memory_usage), source))
       print(string.format('DOCKER_MEAN_MEMORY_USAGE %s %s', toGB(mean(_mem)), source))
       print(string.format('DOCKER_MAX_MEMORY_USAGE %s %s', toGB(max), source))
