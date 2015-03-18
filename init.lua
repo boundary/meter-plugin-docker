@@ -93,7 +93,7 @@ timer.setInterval(pollInterval, function ()
     local n = {}
     for _, container in ipairs(containers) do
       table.insert(c, container.Id)
-      table.insert(n, string.sub(container.Names, 2, -1))
+      table.insert(n, string.sub(container.Names[1], 2, -1))
     end
     local stats = {}
     local count = 0
