@@ -7,7 +7,7 @@ local io       = require('io')
 local os       = require('os')
 
 
-local __pgk        = "Boundary Docker Plugin"
+local __pkg        = "Boundary Docker Plugin"
 local __ver        = "Version 1.0"
 local __tags       = "plugin,lua,docker"
 local _previous    = {}
@@ -24,7 +24,7 @@ if (boundary.param ~= nil) then
 end
 
 function berror(err)
-  if err then print(string.format("_bevent:%s:%s:%s|t:error|tags:%s", __pgk, __ver, tostring(err), __tags)) return err end
+  if err then print(string.format("_bevent:%s:%s:%s|t:error|tags:%s", __pkg, __ver, tostring(err), __tags)) return err end
 end
 
 local doreq = function(host, port, path, cb)
@@ -130,9 +130,9 @@ timer.setInterval(pollInterval, function ()
       local total_tx_bytes = 0
 
       for k, v in pairs(stats) do
-        if (type(v.cpu_stats) ~= nil and type(v.cpu_stats.cpu_usage) ~= nil) do
+        if (type(v.cpu_stats) ~= nil and type(v.cpu_stats.cpu_usage) ~= nil) then
           print(string.format('DOCKER_TOTAL_CPU_USAGE %.3f %s', v.cpu_stats.cpu_usage.total_usage/10^12, k))
-          if (type(v.cpu_stats.cpu_usage.percpu_usage) == 'table') do
+          if (type(v.cpu_stats.cpu_usage.percpu_usage) == 'table') then
             for i=1, table.getn(v.cpu_stats.cpu_usage.percpu_usage) do
               print(string.format('DOCKER_TOTAL_CPU_USAGE %.3f %s-C%d', v.cpu_stats.cpu_usage.percpu_usage[i]/10^12, k, i))
             end
