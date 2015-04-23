@@ -1,12 +1,15 @@
 local timer    = require('timer')
 local http     = require('http')
 local boundary = require('boundary')
-local json     = require('_json')
+local json     = require('json')
 local async    = require('async')
 local io       = require('io')
+local os       = require('os')
 
 
-local __pgk        = "BOUNDARY DOCKER"
+local __pgk        = "Boundary Docker Plugin"
+local __ver        = "Version 1.0"
+local __tags       = "plugin,lua,docker"
 local _previous    = {}
 local pollInterval = 1000
 local host         = "localhost"
@@ -17,12 +20,11 @@ if (boundary.param ~= nil) then
   pollInterval       = boundary.param['pollInterval'] or pollInterval
   host               = boundary.param['host'] or host
   port               = boundary.param['port'] or port
-  source             = (type(boundary.param.source) == 'string' and boundary.param.source:gsub('%s+', '') ~= '' and boundary.param.source) or
-   io.popen("uname -n"):read('*line')
+  source             = (type(boundary.param.source) == 'string' and boundary.param.source:gsub('%s+', '') ~= '' and boundary.param.source) or os.hostname
 end
 
 function berror(err)
-  if err then process.stderr:write(string.format("%s ERROR: %s", __pgk, tostring(err))) return err end
+  if err then print(string.format("_bevent:%s:%s:%s|t:error|tags:%s", __pgk, __ver, tostring(err), __tags)) return err end
 end
 
 local doreq = function(host, port, path, cb)
@@ -82,7 +84,7 @@ function maxmin(t)
 end
 
 
-print("_bevent:Docker plugin up : version 1.0|t:info|tags:nginx,lua,plugin")
+print("_bevent:"..__pkg..":"..__ver..":Up|t:info|tags:"..__tags)
 
 timer.setInterval(pollInterval, function ()
   -- get all running containers
