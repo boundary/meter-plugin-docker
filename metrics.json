@@ -1,74 +1,58 @@
 {
-  "results": [
-      {
-        "name": "DOCKER_TOTAL_CPU_USAGE",
-        "displayName": "Docker total cpu usage",
-        "description": "Total CPU usage - all running containers",
-        "unit": "percent",
-        "displayNameShort": "DK TOTAL CPU",
-        "defaultResolutionMS": 0,
-        "isDisabled": 0,
-        "defaultAggregate": "avg"
-      },
-      {
-        "name": "DOCKER_TOTAL_MEMORY_USAGE",
-        "displayName": "Docker Total memory usage",
-        "description": "Docker Total memory usage - all running containers",
-        "unit": "bytecount",
-        "displayNameShort": "DK TOTAL MEM",
-        "defaultResolutionMS": 0,
-        "isDisabled": 0,
-        "defaultAggregate": "avg"
-      },
-      {
-        "name": "DOCKER_MEAN_MEMORY_USAGE",
-        "displayName": "Docker mean memory usage",
-        "description": "Docker mean memory usage - all running containers",
-        "unit": "bytecount",
-        "displayNameShort": "DK MEAN MEM",
-        "defaultResolutionMS": 0,
-        "isDisabled": 0,
-        "defaultAggregate": "avg"
-      },
-      {
-        "name": "DOCKER_MAX_MEMORY_USAGE",
-        "displayName": "Docker max memory usage",
-        "description": "Docker max memory usage - all running containers",
-        "unit": "bytecount",
-        "displayNameShort": "DK MAX MEM",
-        "defaultResolutionMS": 0,
-        "isDisabled": 0,
-        "defaultAggregate": "avg"
-      },
-      {
-        "name": "DOCKER_MIN_MEMORY_USAGE",
-        "displayName": "Docker min memory usage",
-        "description": "Docker min memory usage - all running containers",
-        "unit": "bytecount",
-        "displayNameShort": "DK MIN MEM",
-        "defaultResolutionMS": 0,
-        "isDisabled": 0,
-        "defaultAggregate": "avg"
-      },
-      {
-        "name": "DOCKER_NETWORK_RX",
-        "displayName": "Docker network i/o",
-        "description": "Docker network i/o - all running containers",
-        "unit": "bytecount",
-        "displayNameShort": "DK TOTAL NETWORK RX",
-        "defaultResolutionMS": 0,
-        "isDisabled": 0,
-        "defaultAggregate": "avg"
-      },
-      {
-        "name": "DOCKER_NETWORK_TX",
-        "displayName": "Docker network i/o",
-        "description": "Docker network i/o - all running containers",
-        "unit": "bytecount",
-        "displayNameShort": "DK TOTAL NETWORK TX",
-        "defaultResolutionMS": 0,
-        "isDisabled": 0,
-        "defaultAggregate": "avg"
-      }
-  ]
+  "DOCKER_MAX_MEMORY_USAGE": {
+    "defaultAggregate": "avg",
+    "defaultResolutionMS": 1000,
+    "description": "Docker max memory usage - all running containers",
+    "displayName": "Docker max memory usage",
+    "displayNameShort": "DK MAX MEM",
+    "unit": "bytecount"
+  },
+  "DOCKER_MEAN_MEMORY_USAGE": {
+    "defaultAggregate": "avg",
+    "defaultResolutionMS": 1000,
+    "description": "Docker mean memory usage - all running containers",
+    "displayName": "Docker mean memory usage",
+    "displayNameShort": "DK MEAN MEM",
+    "unit": "bytecount"
+  },
+  "DOCKER_MIN_MEMORY_USAGE": {
+    "defaultAggregate": "avg",
+    "defaultResolutionMS": 1000,
+    "description": "Docker min memory usage - all running containers",
+    "displayName": "Docker min memory usage",
+    "displayNameShort": "DK MIN MEM",
+    "unit": "bytecount"
+  },
+  "DOCKER_NETWORK_RX": {
+    "defaultAggregate": "avg",
+    "defaultResolutionMS": 1000,
+    "description": "Docker network i/o - all running containers",
+    "displayName": "Docker network i/o",
+    "displayNameShort": "DK TOTAL NETWORK RX",
+    "unit": "bytecount"
+  },
+  "DOCKER_NETWORK_TX": {
+    "defaultAggregate": "avg",
+    "defaultResolutionMS": 1000,
+    "description": "Docker network i/o - all running containers",
+    "displayName": "Docker network i/o",
+    "displayNameShort": "DK TOTAL NETWORK TX",
+    "unit": "bytecount"
+  },
+  "DOCKER_TOTAL_CPU_USAGE": {
+    "defaultAggregate": "avg",
+    "defaultResolutionMS": 1000,
+    "description": "Total CPU usage - all running containers",
+    "displayName": "Docker total cpu usage",
+    "displayNameShort": "DK TOTAL CPU",
+    "unit": "percent"
+  },
+  "DOCKER_TOTAL_MEMORY_USAGE": {
+    "defaultAggregate": "avg",
+    "defaultResolutionMS": 1000,
+    "description": "Docker Total memory usage - all running containers",
+    "displayName": "Docker Total memory usage",
+    "displayNameShort": "DK TOTAL MEM",
+    "unit": "bytecount"
+  }
 }
