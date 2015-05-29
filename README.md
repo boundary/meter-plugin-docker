@@ -17,8 +17,17 @@ Collects metrics from a docker daemon using the stats api.
 
 ### Plugin Setup
 
---
+Docker must run in deamon mode binded to a host and port. You can do this running Docker with the following command line:
 
+```
+$ sudo docker -H 127.0.0.0.1:2375 -d
+```
+
+Or edit the _/etc/default/docker_ and add *DOCKER_OPTS="-H 127.0.0.1:2375"* then restart the service
+
+```
+$ sudo service docker restart
+``` 
 
 #### Plugin Configuration Fields
 
