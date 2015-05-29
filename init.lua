@@ -88,7 +88,6 @@ local stats = {}
 stats.memory = {}
 local plugin = Plugin:new(params, ds)
 function plugin:onParseValues(data, extra)
-  p(data)
   --local parsed = json.parse(data)
   local parsed = json:decode(data)
   local metrics = {}
@@ -128,7 +127,8 @@ function plugin:onParseValues(data, extra)
     stats = {}
     stats.memory = {}
 
-    return metrics
   end
+
+  return metrics
 end
 plugin:run()
