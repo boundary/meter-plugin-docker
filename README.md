@@ -52,6 +52,7 @@ $ sudo service docker restart
 
 ### Dashboards
 
+- Docker Summary
 
 ### References
 
