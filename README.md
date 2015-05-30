@@ -35,6 +35,8 @@ $ sudo service docker restart
 |:---------|:----------------------------------------------------------|
 |Port      |The Docker Daemon port.                                        |
 |Host      |The Docker Daemon hostname.                                    |
+|Poll Interval | How often (in milliseconds) to poll the Couchbase node for metrics. |
+|Source | The source to display in the legend for the data. |
 
 ### Metrics Collected
 
