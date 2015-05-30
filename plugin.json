@@ -16,7 +16,7 @@
 
     "paramSchema": [
         {
-            "title": "HOST",
+            "title": "Host",
             "name": "host",
             "description": "The Docker Daemon hostname",
             "type": "string",
@@ -30,10 +30,16 @@
             "default" : 80
         },
         {
+            "title" : "Source",
+            "name" : "source",
+            "description" : "The Source to display in the legend for the data. It will default to the hostname of the server",
+            "type" : "string"
+        },
+        {
             "title": "Poll Interval",
             "name": "pollInterval",
             "description": "The Poll Interval to call the command in milliseconds. Defaults to 1000 milliseconds",
-            "type": "string",
+            "type": "numeric",
             "default": 1000,
             "required": false
         }
