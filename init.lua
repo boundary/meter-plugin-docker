@@ -35,10 +35,6 @@ options.host = notEmpty(params.host, '127.0.0.1')
 options.port = notEmpty(params.port, '2375')
 options.path = '/containers/json'
 
-local function toGB(val)
-  return round(val/1024^3, 3) or 0
-end
-
 local function maxmin(t)
   local max = -math.huge
   local min = math.huge
@@ -95,10 +91,13 @@ function plugin:onParseValues(data, extra)
   -- Output metrics for each container
   pending_requests[extra.info] = nil
   local source = self.source .. '.' .. extra.info
-  table.insert(metrics, pack('DOCKER_TOTAL_CPU_USAGE', parsed.cpu_stats.cpu_usage.total_usage/10^12, nil, source))
-  table.insert(metrics, pack('DOCKER_TOTAL_MEMORY_USAGE', toGB(parsed.memory_stats.usage), nil, source))
-  table.insert(metrics, pack('DOCKER_NETWORK_RX', toGB(parsed.network.rx_bytes), nil, source))
-  table.insert(metrics, pack('DOCKER_NETWORK_TX', toGB(parsed.network.tx_bytes), nil, source))
+  p(parsed.cpu_stats)
+  p(parsed.cpu_stats.cpu_usage)
+  p(parsed.cpu_stats.cpu_usage.total_usage)
+  table.insert(metrics, pack('DOCKER_TOTAL_CPU_USAGE', parsed.cpu_stats.cpu_usage.total_usage/(10^12), nil, source))
+  table.insert(metrics, pack('DOCKER_TOTAL_MEMORY_USAGE', round(parsed.memory_stats.usage, 2), nil, source))
+  table.insert(metrics, pack('DOCKER_NETWORK_RX', round(parsed.network.rx_bytes, 2), nil, source))
+  table.insert(metrics, pack('DOCKER_NETWORK_TX', round(parsed.network.tx_bytes, 2), nil, source))
   
   table.insert(stats.memory, parsed.memory_stats.usage)
   local percpu_usage = parsed.cpu_stats.cpu_usage.percpu_usage
@@ -109,20 +108,20 @@ function plugin:onParseValues(data, extra)
   end
 
   stats.total_memory_usage = (stats.total_memory_usage or 0) + parsed.memory_stats.usage
-  stats.total_cpu_usage = (stats.total_cpu_usage or 0) + parsed.cpu_stats.cpu_usage.total_usage
+  stats.total_cpu_usage = (stats.total_cpu_usage or 0) + parsed.cpu_stats.cpu_usage.total_usage/10^12
   stats.total_rx_bytes = (stats.total_rx_bytes or 0) + parsed.network.rx_bytes
   stats.total_tx_bytes = (stats.total_tx_bytes or 0) + parsed.network.tx_bytes
 
   -- Output aggregated metrics from all containers
   if not hasAny(pending_requests) then
     local memory_max, memory_min = maxmin(stats.memory)
-    table.insert(metrics, pack('DOCKER_TOTAL_CPU_USAGE', stats.total_cpu_usage/10^12))
-    table.insert(metrics, pack('DOCKER_TOTAL_MEMORY_USAGE', toGB(stats.total_memory_usage)))
-    table.insert(metrics, pack('DOCKER_MEAN_MEMORY_USAGE', toGB(mean(stats.memory))))
-    table.insert(metrics, pack('DOCKER_MAX_MEMORY_USAGE', toGB(memory_max)))
-    table.insert(metrics, pack('DOCKER_MIN_MEMORY_USAGE', toGB(memory_min)))
-    table.insert(metrics, pack('DOCKER_NETWORK_RX', toGB(stats.total_rx_bytes)))
-    table.insert(metrics, pack('DOCKER_NETWORK_TX', toGB(stats.total_tx_bytes)))
+    table.insert(metrics, pack('DOCKER_TOTAL_CPU_USAGE', stats.total_cpu_usage))
+    table.insert(metrics, pack('DOCKER_TOTAL_MEMORY_USAGE', stats.total_memory_usage))
+    table.insert(metrics, pack('DOCKER_MEAN_MEMORY_USAGE', mean(stats.memory)))
+    table.insert(metrics, pack('DOCKER_MAX_MEMORY_USAGE', memory_max))
+    table.insert(metrics, pack('DOCKER_MIN_MEMORY_USAGE', memory_min))
+    table.insert(metrics, pack('DOCKER_NETWORK_RX', stats.total_rx_bytes))
+    table.insert(metrics, pack('DOCKER_NETWORK_TX', stats.total_tx_bytes))
 
     stats = {}
     stats.memory = {}

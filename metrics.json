@@ -27,7 +27,7 @@
     "defaultAggregate": "avg",
     "defaultResolutionMS": 1000,
     "description": "Docker network i/o - all running containers",
-    "displayName": "Docker network i/o",
+    "displayName": "Docker network i/oi RX",
     "displayNameShort": "DK TOTAL NETWORK RX",
     "unit": "bytecount"
   },
@@ -35,7 +35,7 @@
     "defaultAggregate": "avg",
     "defaultResolutionMS": 1000,
     "description": "Docker network i/o - all running containers",
-    "displayName": "Docker network i/o",
+    "displayName": "Docker network i/o TX",
     "displayNameShort": "DK TOTAL NETWORK TX",
     "unit": "bytecount"
   },

@@ -13,10 +13,15 @@
         "DOCKER_NETWORK_RX",
         "DOCKER_NETWORK_TX"
     ],
-
+    "dashboards": [
+        {
+            "name" : "Docker Summary",
+            "layout" : "d-w=3&d-h=2&d-pad=5&d-bg=none&d-g-DOCKER_TOTAL_CPU_USAGE=0-0-1-1&d-g-DOCKER_TOTAL_MEMORY_USAGE=1-0-1-1&d-g-DOCKER_MEAN_MEMORY_USAGE=2-0-1-1&d-g-DOCKER_MAX_MEMORY_USAGE=0-1-1-1-t&d-g-DOCKER_MIN_MEMORY_USAGE=0-1-1-1-b&d-g-DOCKER_NETWORK_RX=1-1-1-1&d-g-DOCKER_NETWORK_TX=2-1-1-1"
+        }
+    ],
     "paramSchema": [
         {
-            "title": "HOST",
+            "title": "Host",
             "name": "host",
             "description": "The Docker Daemon hostname",
             "type": "string",
@@ -27,13 +32,19 @@
             "name" : "port",
             "description" : "The Docker Daemon port",
             "type" : "integer",
-            "default" : 80
+            "default" : 2375 
+        },
+        {
+            "title" : "Source",
+            "name" : "source",
+            "description" : "The Source to display in the legend for the data. It will default to the hostname of the server",
+            "type" : "string"
         },
         {
             "title": "Poll Interval",
             "name": "pollInterval",
             "description": "The Poll Interval to call the command in milliseconds. Defaults to 1000 milliseconds",
-            "type": "string",
+            "type": "numeric",
             "default": 1000,
             "required": false
         }
