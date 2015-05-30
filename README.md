@@ -23,7 +23,7 @@ Docker must run in deamon mode binded to a host and port. You can do this runnin
 $ sudo docker -H 127.0.0.0.1:2375 -d
 ```
 
-Or edit the **/etc/default/docker_** and add **DOCKER_OPTS="-H 127.0.0.1:2375"** then restart the service
+Or edit the **/etc/default/docker** and add **DOCKER_OPTS="-H 127.0.0.1:2375"** then restart the service
 
 ```
 $ sudo service docker restart
@@ -35,7 +35,7 @@ $ sudo service docker restart
 |:---------|:----------------------------------------------------------|
 |Port      |The Docker Daemon port.                                        |
 |Host      |The Docker Daemon hostname.                                    |
-|Poll Interval | How often (in milliseconds) to poll the Couchbase node for metrics. |
+|Poll Interval | How often (in milliseconds) to poll for metrics. |
 |Source | The source to display in the legend for the data. |
 
 ### Metrics Collected
