@@ -91,7 +91,10 @@ function plugin:onParseValues(data, extra)
   -- Output metrics for each container
   pending_requests[extra.info] = nil
   local source = self.source .. '.' .. extra.info
-  table.insert(metrics, pack('DOCKER_TOTAL_CPU_USAGE', parsed.cpu_stats.cpu_usage.total_usage/1024^13, nil, source))
+  p(parsed.cpu_stats)
+  p(parsed.cpu_stats.cpu_usage)
+  p(parsed.cpu_stats.cpu_usage.total_usage)
+  table.insert(metrics, pack('DOCKER_TOTAL_CPU_USAGE', parsed.cpu_stats.cpu_usage.total_usage/(10^12), nil, source))
   table.insert(metrics, pack('DOCKER_TOTAL_MEMORY_USAGE', round(parsed.memory_stats.usage, 2), nil, source))
   table.insert(metrics, pack('DOCKER_NETWORK_RX', round(parsed.network.rx_bytes, 2), nil, source))
   table.insert(metrics, pack('DOCKER_NETWORK_TX', round(parsed.network.tx_bytes, 2), nil, source))
@@ -100,12 +103,12 @@ function plugin:onParseValues(data, extra)
   local percpu_usage = parsed.cpu_stats.cpu_usage.percpu_usage
   if (type(percpu_usage) == 'table') then
     for i=1, table.getn(percpu_usage) do
-      table.insert(metrics, pack('DOCKER_TOTAL_CPU_USAGE', percpu_usage[i]/1024^13, nil, source .. '-C' .. i))
+      table.insert(metrics, pack('DOCKER_TOTAL_CPU_USAGE', percpu_usage[i]/10^12, nil, source .. '-C' .. i))
     end
   end
 
   stats.total_memory_usage = (stats.total_memory_usage or 0) + parsed.memory_stats.usage
-  stats.total_cpu_usage = (stats.total_cpu_usage or 0) + parsed.cpu_stats.cpu_usage.total_usage/1024^13
+  stats.total_cpu_usage = (stats.total_cpu_usage or 0) + parsed.cpu_stats.cpu_usage.total_usage/10^12
   stats.total_rx_bytes = (stats.total_rx_bytes or 0) + parsed.network.rx_bytes
   stats.total_tx_bytes = (stats.total_tx_bytes or 0) + parsed.network.tx_bytes
 
