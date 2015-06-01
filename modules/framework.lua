@@ -42,6 +42,8 @@ local boundary = require('boundary')
 framework.version = '0.9.2'
 framework.boundary = boundary
 framework.params = boundary.param or {}
+framework.plugin_params = boundary.plugin_params or {}
+local plugin_params = framework.plugin_params
 
 framework.string = {}
 framework.functional = {}
@@ -505,11 +507,6 @@ function framework.util.parseLinks(html_str)
   return links
 end
 
-function framework.util.sum(a, b)
-  return a + b
-end
-local sum = framework.util.sum
-
 --- Creates an absolute link from a basePath and a relative link.
 -- @param basePath the base path to generate an absolute link.
 -- @param link a relative link
@@ -558,7 +555,6 @@ end
 function framework.util.currentTimestamp()
   return os.time()
 end
-local currentTimestamp = framework.util.currentTimestamp
 
 --- Convert megabytes to bytes.
 -- @param mb the number of megabytes
@@ -666,13 +662,24 @@ function framework.table.count(t)
   return count
 end
 
+function framework.util.add(a, b)
+  return a + b
+end
+local add = framework.util.add 
+
+--- Get the mean value of the elements from a table
+-- @param t a table 
+-- @return the mean value 
 local reduce = framework.functional.reduce
 function framework.util.mean(t)
   local count = table.getn(t) 
-  local sum = reduce(sum, 0, t) 
-  
+  if count == 0 then
+    return 0
+  end
+  local sum = reduce(add, 0, t) 
   return sum/count
 end
+
 
 --- Get returns true if there is any element in the table.
 -- @param t a table
@@ -982,6 +989,7 @@ local DataSourcePoller = Emitter:extend()
 -- @name DataSourcePoller:new
 function DataSourcePoller:initialize(pollInterval, dataSource)
   self.pollInterval = pollInterval
+  if self.pollInterval < 500 then self.pollInterval = self.pollInterval * 1000 end
   self.dataSource = dataSource
   dataSource:propagate('error', self)
 end
@@ -1022,6 +1030,8 @@ function Plugin:initialize(params, dataSource)
   assert(dataSource, 'Plugin:new dataSource is required.')
 
   local pollInterval = params.pollInterval or 1000
+  if pollInterval < 500 then pollInterval = pollInterval * 1000 end
+
   if not Plugin:_isPoller(dataSource) then
     self.dataSource = DataSourcePoller:new(pollInterval, dataSource)
     self.dataSource:propagate('error', self)
@@ -1029,9 +1039,15 @@ function Plugin:initialize(params, dataSource)
     self.dataSource = dataSource
   end
   self.source = notEmpty(params.source, os.hostname())
-  self.version = params.version or '1.0'
-  self.name = params.name or 'Boundary Plugin'
-  self.tags = params.tags or ''
+  if (plugin_params) then
+    self.version = notEmpty(plugin_params.version, notEmpty(params.version, '0.0'))
+    self.name = notEmpty(plugin_params.name, notEmpty(params.name, 'Boundary Plugin'))
+    self.tags = notEmpty(plugin_params.tags, notEmpty(params.tags, ''))
+  else
+    self.version = notEmpty(params.version, '0.0')
+    self.name = notEmpty(params.name, 'Boundary Plugin')
+    self.tags = notEmpty(params.tags, '')
+  end
 
   dataSource:propagate('error', self)
 
@@ -1130,21 +1146,21 @@ function Plugin:onReport(metrics)
   for metric, v in pairs(metrics) do
     -- { { metric, value .. }, { metric, value .. } }
     if type(metric) == 'number' then
-      print(self:format(v.metric, v.value, notEmpty(v.source, self.source), v.timestamp or currentTimestamp()))
+      print(self:format(v.metric, v.value, notEmpty(v.source, self.source), v.timestamp))
     elseif type(v) ~= 'table' then
-      print(self:format(metric, v, self.source, currentTimestamp()))
+      print(self:format(metric, v, self.source))
     elseif type(v[1]) ~= 'table' and v.value then
       -- looking for { metric = { value, source, timestamp }}
       local source = v.source or self.source
       local value = v.value
-      local timestamp = v.timestamp or currentTimestamp()
+      local timestamp = v.timestamp
       print(self:format(metric, value, source, timestamp))
     else
       -- looking for { metric = {{ value, source, timestamp }}}
       for _, j in pairs(v) do
         local source = j.source or self.source
         local value = j.value
-        local timestamp = j.timestamp or currentTimestamp()
+        local timestamp = j.timestamp
         print(self:format(metric, value, source, timestamp))
       end
     end
@@ -1163,7 +1179,11 @@ end
 -- @param timestamp the time the metric was retrieved
 -- You can override this on your plugin instance.
 function Plugin:onFormat(metric, value, source, timestamp)
-  return string.format('%s %f %s %s', metric, value, source, timestamp)
+  if timestamp then
+    return string.format('%s %f %s %s', metric, value, source, timestamp)
+  else
+    return string.format('%s %f %s', metric, value, source)
+  end
 end
 
 --- Acumulator Class
