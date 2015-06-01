@@ -26,9 +26,6 @@ local pack = framework.util.pack
 local mean = framework.util.mean
 
 local params = framework.params
-params.name = "Boundary Plugin Docker"
-params.version = "2.0"
-params.tags = "docker"
 
 local options = {}
 options.host = notEmpty(params.host, '127.0.0.1')
