@@ -1,4 +1,7 @@
 {
+    "name" : "Boundary Docker Plugin",
+    "version" : "2.0",
+    "tags" : "docker",
     "description": "Docker Boundary Plugin",
     "icon" : "icon.png",
     "command": "boundary-meter init.lua",

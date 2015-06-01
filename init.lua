@@ -26,9 +26,6 @@ local pack = framework.util.pack
 local mean = framework.util.mean
 
 local params = framework.params
-params.name = "Boundary Plugin Docker"
-params.version = "2.0"
-params.tags = "docker"
 
 local options = {}
 options.host = notEmpty(params.host, '127.0.0.1')
@@ -91,14 +88,10 @@ function plugin:onParseValues(data, extra)
   -- Output metrics for each container
   pending_requests[extra.info] = nil
   local source = self.source .. '.' .. extra.info
-  p(parsed.cpu_stats)
-  p(parsed.cpu_stats.cpu_usage)
-  p(parsed.cpu_stats.cpu_usage.total_usage)
   table.insert(metrics, pack('DOCKER_TOTAL_CPU_USAGE', parsed.cpu_stats.cpu_usage.total_usage/(10^12), nil, source))
   table.insert(metrics, pack('DOCKER_TOTAL_MEMORY_USAGE', round(parsed.memory_stats.usage, 2), nil, source))
   table.insert(metrics, pack('DOCKER_NETWORK_RX', round(parsed.network.rx_bytes, 2), nil, source))
   table.insert(metrics, pack('DOCKER_NETWORK_TX', round(parsed.network.tx_bytes, 2), nil, source))
-  
   table.insert(stats.memory, parsed.memory_stats.usage)
   local percpu_usage = parsed.cpu_stats.cpu_usage.percpu_usage
   if (type(percpu_usage) == 'table') then
