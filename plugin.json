@@ -44,10 +44,10 @@
       "type" : "string"
     },
     {
-      "title": "Poll Interval",
+      "title": "Poll Interval (ms)",
       "name": "pollInterval",
-      "description": "The Poll Interval to call the command in milliseconds. Defaults to 1000 milliseconds",
-      "type": "numeric",
+      "description": "The Poll Interval (in milliseconds) to poll for metrics.",
+      "type": "integer",
       "default": 1000,
       "required": false
     }
