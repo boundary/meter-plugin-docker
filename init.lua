@@ -18,7 +18,6 @@ local WebRequestDataSource = framework.WebRequestDataSource
 local json = require('_json')
 local map = framework.functional.map
 local clone = framework.table.clone
-local each = framework.functional.each
 local hasAny = framework.table.hasAny
 local notEmpty = framework.string.notEmpty
 local round = framework.util.round
