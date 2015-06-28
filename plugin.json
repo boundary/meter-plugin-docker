@@ -1,11 +1,15 @@
 {
   "name" : "Boundary Docker Plugin",
-  "version" : "2.0",
+  "version" : "0.9.1",
+  "meterVersionRequired" : "4.2.0-611",
+  "unsupportedPlatforms" : [ ],
   "tags" : "docker",
   "description": "Docker Boundary Plugin",
   "icon" : "icon.png",
   "command": "boundary-meter init.lua",
+  "command_lua" : "boundary-meter init.lua",
   "postExtract" : "",
+  "postExtract_lua" : "",
 
   "metrics" : [
     "DOCKER_TOTAL_CPU_USAGE",
