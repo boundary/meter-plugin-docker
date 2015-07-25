@@ -32,7 +32,7 @@
       "name": "host",
       "description": "The Docker Daemon hostname",
       "type": "string",
-      "default": "localhost"
+      "default": "127.0.0.1"
     },
     {
       "title" : "Port",
