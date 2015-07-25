@@ -32,20 +32,16 @@
       "name": "host",
       "description": "The Docker Daemon hostname",
       "type": "string",
-      "default": "localhost"
+      "default": "127.0.0.1",
+      "required" : true
     },
     {
       "title" : "Port",
       "name" : "port",
       "description" : "The Docker Daemon port",
       "type" : "integer",
-      "default" : 2375 
-    },
-    {
-      "title" : "Source",
-      "name" : "source",
-      "description" : "The Source to display in the legend for the data. It will default to the hostname of the server",
-      "type" : "string"
+      "default" : 2375,
+      "required" : true
     },
     {
       "title": "Poll Interval (ms)",
@@ -54,6 +50,12 @@
       "type": "integer",
       "default": 1000,
       "required": false
+    },
+    {
+      "title" : "Source",
+      "name" : "source",
+      "description" : "The Source to display in the legend for the data. It will default to the hostname of the server",
+      "type" : "string"
     }
   ]
 }
