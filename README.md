@@ -1,6 +1,6 @@
 # Boundary Docker Plugin
 
-Collects metrics from a docker daemon using the stats api.
+Collects metrics from the Docker daemon using the remote api.
 
 ### Prerequisites
 
@@ -33,8 +33,8 @@ $ sudo service docker restart
 
 |Field Name|Description                                                |
 |:---------|:----------------------------------------------------------|
-|Port      |The Docker Daemon port.                                        |
 |Host      |The Docker Daemon hostname.                                    |
+|Port      |The Docker Daemon port.                                        |
 |Poll Interval | How often (in milliseconds) to poll for metrics. |
 |Source | The source to display in the legend for the data. |
 
@@ -42,13 +42,13 @@ $ sudo service docker restart
 
 |Metric Name          |Description                       |
 |:--------------------|:---------------------------------|
-| DOCKER_TOTAL_CPU_USAGE | Docker total cpu usage, all running containers
-| DOCKER_TOTAL_MEMORY_USAGE | Docker total memory usage, all running containers
-| DOCKER_MEAN_MEMORY_USAGE | Docker mean memory usage, all running containers
-| DOCKER_MAX_MEMORY_USAGE | Docker max memory usage
-| DOCKER_MIN_MEMORY_USAGE | Docker min memory usage
-| DOCKER_NETWORK_RX | Docker total network rx, all running containers
-| DOCKER_NETWORK_TX | Docker total network tx, all running containers
+| DOCKER_TOTAL_CPU_USAGE | Docker total cpu usage, total and per running containers |
+| DOCKER_TOTAL_MEMORY_USAGE | Docker total memory usage, total and per running containers |
+| DOCKER_MEAN_MEMORY_USAGE | Docker mean memory usage, all running containers |
+| DOCKER_MAX_MEMORY_USAGE | Docker max memory usage |
+| DOCKER_MIN_MEMORY_USAGE | Docker min memory usage |
+| DOCKER_NETWORK_RX | Docker total network rx, all running containers |
+| DOCKER_NETWORK_TX | Docker total network tx, all running containers |
 
 ### Dashboards
 
@@ -57,3 +57,4 @@ $ sudo service docker restart
 ### References
 
 https://docs.docker.com/reference/api/docker_remote_api/
+
