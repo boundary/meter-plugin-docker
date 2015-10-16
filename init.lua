@@ -76,8 +76,14 @@ ds:chain(function (context, callback, data)
   return data_sources
 end)
 
-local stats = {}
-stats.memory = {}
+local function resetStats()
+  local stats = {}
+  stats.memory = {}
+  stats.cpu_usage = {}
+  return stats
+end
+
+local stats = resetStats()
 local plugin = Plugin:new(params, ds)
 function plugin:onParseValues(data, extra)
   --local parsed = json.parse(data)
@@ -98,7 +104,9 @@ function plugin:onParseValues(data, extra)
   local percpu_usage = parsed.cpu_stats.cpu_usage.percpu_usage
   if (type(percpu_usage) == 'table') then
     for i=1, table.getn(percpu_usage) do
-      metric('DOCKER_TOTAL_CPU_USAGE', percpu_usage[i]/10^12, nil, source .. '-C' .. i)
+      local value = percpu_usage[i]/10^12
+      metric('DOCKER_TOTAL_CPU_USAGE', value, nil, source .. '-C' .. i)
+      table.insert(stats.cpu_usage, value)
     end
   end
 
@@ -110,7 +118,7 @@ function plugin:onParseValues(data, extra)
   -- Output aggregated metrics from all containers
   if not hasAny(pending_requests) then
     local memory_max, memory_min = maxmin(stats.memory)
-    metric('DOCKER_TOTAL_CPU_USAGE', stats.total_cpu_usage)
+    metric('DOCKER_TOTAL_CPU_USAGE', mean(stats.cpu_usage))
     metric('DOCKER_TOTAL_MEMORY_USAGE', stats.total_memory_usage)
     metric('DOCKER_MEAN_MEMORY_USAGE', mean(stats.memory))
     metric('DOCKER_MAX_MEMORY_USAGE', memory_max)
@@ -118,8 +126,7 @@ function plugin:onParseValues(data, extra)
     metric('DOCKER_NETWORK_RX', stats.total_rx_bytes)
     metric('DOCKER_NETWORK_TX', stats.total_tx_bytes)
 
-    stats = {}
-    stats.memory = {}
+    stats = resetStats() 
   end
 
   return metrics
