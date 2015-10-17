@@ -102,6 +102,10 @@ function plugin:onParseValues(data, extra)
 --  metric('DOCKER_TOTAL_MEMORY_USAGE', round(parsed.memory_stats.usage, 2), nil, source)
   metric('DOCKER_NETWORK_RX_BYTES', round(parsed.network.rx_bytes, 2), nil, source)
   metric('DOCKER_NETWORK_TX_BYTES', round(parsed.network.tx_bytes, 2), nil, source)
+  metric('DOCKER_NETWORK_RX_PACKETS', round(parsed.network.rx_packets, 2), nil, source)
+  metric('DOCKER_NETWORK_TX_PACKETS', round(parsed.network.tx_packets, 2), nil, source)
+  metric('DOCKER_NETWORK_RX_ERRORS', parsed.network.rx_errors, nil, source)
+  metric('DOCKER_NETWORK_TX_ERRORS', parsed.network.tx_errors, nil, source)
   table.insert(stats.memory, parsed.memory_stats.usage)
   table.insert(stats.cpu_usage, total_cpu_usage)
   local percpu_usage = parsed.cpu_stats.cpu_usage.percpu_usage
@@ -116,6 +120,10 @@ function plugin:onParseValues(data, extra)
   stats.total_cpu_usage = (stats.total_cpu_usage or 0) + parsed.cpu_stats.cpu_usage.total_usage/10^12
   stats.total_rx_bytes = (stats.total_rx_bytes or 0) + parsed.network.rx_bytes
   stats.total_tx_bytes = (stats.total_tx_bytes or 0) + parsed.network.tx_bytes
+  stats.total_rx_packets = (stats.total_rx_packets or 0) + parsed.network.rx_packets
+  stats.total_tx_packets = (stats.total_tx_packets or 0) + parsed.network.tx_packets
+  stats.total_rx_errors = (stats.total_rx_errors or 0) + parsed.network.rx_errors
+  stats.total_tx_errors = (stats.total_tx_errors or 0) + parsed.network.tx_errors
 
   -- Output aggregated metrics from all containers
   if not hasAny(pending_requests) then
@@ -127,6 +135,10 @@ function plugin:onParseValues(data, extra)
 --    metric('DOCKER_MIN_MEMORY_USAGE', memory_min)
     metric('DOCKER_NETWORK_RX_BYTES', stats.total_rx_bytes)
     metric('DOCKER_NETWORK_TX_BYTES', stats.total_tx_bytes)
+    metric('DOCKER_NETWORK_RX_PACKETS', stats.total_rx_packets)
+    metric('DOCKER_NETWORK_TX_PACKETS', stats.total_tx_packets)
+    metric('DOCKER_NETWORK_RX_ERRORS', stats.total_rx_errors)
+    metric('DOCKER_NETWORK_TX_ERRORS', stats.total_tx_errors)
 
     stats = resetStats() 
   end
