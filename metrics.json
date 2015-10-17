@@ -23,7 +23,7 @@
     "displayNameShort": "DK MIN MEM",
     "unit": "bytecount"
   },
-  "DOCKER_NETWORK_RX": {
+  "DOCKER_NETWORK_RX_BYTES": {
     "defaultAggregate": "avg",
     "defaultResolutionMS": 1000,
     "description": "Docker network i/o - all running containers",
@@ -31,7 +31,7 @@
     "displayNameShort": "DK TOTAL NETWORK RX",
     "unit": "bytecount"
   },
-  "DOCKER_NETWORK_TX": {
+  "DOCKER_NETWORK_TX_BYTES": {
     "defaultAggregate": "avg",
     "defaultResolutionMS": 1000,
     "description": "Docker network i/o - all running containers",
