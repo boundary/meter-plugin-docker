@@ -1,43 +1,19 @@
 {
-  "DOCKER_MAX_MEMORY_USAGE": {
+  "DOCKER_MEMORY_USAGE_BYTES": {
     "defaultAggregate": "avg",
     "defaultResolutionMS": 1000,
-    "description": "Docker max memory usage - all running containers",
-    "displayName": "Docker max memory usage",
-    "displayNameShort": "DK MAX MEM",
+    "description": "Docker Total memory usage - all running containers",
+    "displayName": "Docker Total memory usage",
+    "displayNameShort": "DK MEM BYTES",
     "unit": "bytecount"
   },
-  "DOCKER_MEAN_MEMORY_USAGE": {
+  "DOCKER_MEMORY_USAGE_PERCENT'": {
     "defaultAggregate": "avg",
     "defaultResolutionMS": 1000,
-    "description": "Docker mean memory usage - all running containers",
-    "displayName": "Docker mean memory usage",
-    "displayNameShort": "DK MEAN MEM",
-    "unit": "bytecount"
-  },
-  "DOCKER_MIN_MEMORY_USAGE": {
-    "defaultAggregate": "avg",
-    "defaultResolutionMS": 1000,
-    "description": "Docker min memory usage - all running containers",
-    "displayName": "Docker min memory usage",
-    "displayNameShort": "DK MIN MEM",
-    "unit": "bytecount"
-  },
-  "DOCKER_NETWORK_RX": {
-    "defaultAggregate": "avg",
-    "defaultResolutionMS": 1000,
-    "description": "Docker network i/o - all running containers",
-    "displayName": "Docker network i/oi RX",
-    "displayNameShort": "DK TOTAL NETWORK RX",
-    "unit": "bytecount"
-  },
-  "DOCKER_NETWORK_TX": {
-    "defaultAggregate": "avg",
-    "defaultResolutionMS": 1000,
-    "description": "Docker network i/o - all running containers",
-    "displayName": "Docker network i/o TX",
-    "displayNameShort": "DK TOTAL NETWORK TX",
-    "unit": "bytecount"
+    "description": "Docker memory usage percent - all running containers",
+    "displayName": "Docker  memory usage percent",
+    "displayNameShort": "DK MEM %",
+    "unit": "percent"
   },
   "DOCKER_TOTAL_CPU_USAGE": {
     "defaultAggregate": "avg",
@@ -47,12 +23,52 @@
     "displayNameShort": "DK TOTAL CPU",
     "unit": "percent"
   },
-  "DOCKER_TOTAL_MEMORY_USAGE": {
+  "DOCKER_NETWORK_RX_BYTES": {
     "defaultAggregate": "avg",
     "defaultResolutionMS": 1000,
-    "description": "Docker Total memory usage - all running containers",
-    "displayName": "Docker Total memory usage",
-    "displayNameShort": "DK TOTAL MEM",
+    "description": "Docker network i/o - all running containers",
+    "displayName": "Docker network i/oi RX",
+    "displayNameShort": "DK TOTAL NETWORK RX",
     "unit": "bytecount"
+  },
+  "DOCKER_NETWORK_TX_BYTES": {
+    "defaultAggregate": "avg",
+    "defaultResolutionMS": 1000,
+    "description": "Docker network i/o - all running containers",
+    "displayName": "Docker network i/o TX",
+    "displayNameShort": "DK TOTAL NETWORK TX",
+    "unit": "number"
+  },
+  "DOCKER_NETWORK_RX_PACKETS": {
+    "defaultAggregate": "avg",
+    "defaultResolutionMS": 1000,
+    "description": "Docker network RX packets - all running containers",
+    "displayName": "Docker network i/o RX packets'",
+    "displayNameShort": "DK NET PCKTS RX",
+    "unit": "number"
+  },
+  "DOCKER_NETWORK_TX_PACKETS": {
+    "defaultAggregate": "avg",
+    "defaultResolutionMS": 1000,
+    "description": "Docker network TX packets - all running containers",
+    "displayName": "Docker network i/o TX packets",
+    "displayNameShort": "DK NET PCKTS RX",
+    "unit": "number"
+  },
+  "DOCKER_NETWORK_RX_ERRORS": {
+    "defaultAggregate": "avg",
+    "defaultResolutionMS": 1000,
+    "description": "Docker network RX errors - all running containers",
+    "displayName": "Docker network RX errors",
+    "displayNameShort": "DK NET RX ERRORS",
+    "unit": "number"
+  },
+  "DOCKER_NETWORK_TX_ERRORS": {
+    "defaultAggregate": "avg",
+    "defaultResolutionMS": 1000,
+    "description": "Docker network i/o TX errors - all running containers",
+    "displayName": "Docker network i/o TX errors",
+    "displayNameShort": "DK NETWORK TX ERRORS",
+    "unit": "number"
   }
 }
