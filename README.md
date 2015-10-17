@@ -45,10 +45,12 @@ $ sudo service docker restart
 | DOCKER_TOTAL_CPU_USAGE | Docker total cpu usage, total and per running containers |
 | DOCKER_TOTAL_MEMORY_USAGE | Docker total memory usage, total and per running containers |
 | DOCKER_MEAN_MEMORY_USAGE | Docker mean memory usage, all running containers |
-| DOCKER_MAX_MEMORY_USAGE | Docker max memory usage |
-| DOCKER_MIN_MEMORY_USAGE | Docker min memory usage |
-| DOCKER_NETWORK_RX | Docker total network rx, all running containers |
-| DOCKER_NETWORK_TX | Docker total network tx, all running containers |
+| DOCKER_NETWORK_RX_BYTES | Docker total network rx bytes |
+| DOCKER_NETWORK_TX_BYTES | Docker total network tx bytes |
+| DOCKER_NETWORK_TX_PACKETS | Docker total network tx packets |
+| DOCKER_NETWORK_RX_PACKETS | Docker total network tx packets |
+| DOCKER_NETWORK_RX_ERRORS | Docker total network tx errors |
+| DOCKER_NETWORK_RX_ERRORS | Docker total network tx errors |
 
 ### Dashboards
 
