@@ -127,12 +127,9 @@ function plugin:onParseValues(data, extra)
 
   -- Output aggregated metrics from all containers
   if not hasAny(pending_requests) then
-    local memory_max, memory_min = maxmin(stats.memory)
     metric('DOCKER_TOTAL_CPU_USAGE', sum(stats.cpu_usage))
 --    metric('DOCKER_TOTAL_MEMORY_USAGE', stats.total_memory_usage)
 --    metric('DOCKER_MEAN_MEMORY_USAGE', mean(stats.memory))
---    metric('DOCKER_MAX_MEMORY_USAGE', memory_max)
---    metric('DOCKER_MIN_MEMORY_USAGE', memory_min)
     metric('DOCKER_NETWORK_RX_BYTES', stats.total_rx_bytes)
     metric('DOCKER_NETWORK_TX_BYTES', stats.total_tx_bytes)
     metric('DOCKER_NETWORK_RX_PACKETS', stats.total_rx_packets)

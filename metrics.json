@@ -1,26 +1,10 @@
 {
-  "DOCKER_MAX_MEMORY_USAGE": {
-    "defaultAggregate": "avg",
-    "defaultResolutionMS": 1000,
-    "description": "Docker max memory usage - all running containers",
-    "displayName": "Docker max memory usage",
-    "displayNameShort": "DK MAX MEM",
-    "unit": "bytecount"
-  },
   "DOCKER_MEAN_MEMORY_USAGE": {
     "defaultAggregate": "avg",
     "defaultResolutionMS": 1000,
     "description": "Docker mean memory usage - all running containers",
     "displayName": "Docker mean memory usage",
     "displayNameShort": "DK MEAN MEM",
-    "unit": "bytecount"
-  },
-  "DOCKER_MIN_MEMORY_USAGE": {
-    "defaultAggregate": "avg",
-    "defaultResolutionMS": 1000,
-    "description": "Docker min memory usage - all running containers",
-    "displayName": "Docker min memory usage",
-    "displayNameShort": "DK MIN MEM",
     "unit": "bytecount"
   },
   "DOCKER_TOTAL_CPU_USAGE": {
