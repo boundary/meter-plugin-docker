@@ -26,7 +26,7 @@
   "dashboards": [
     {
       "name" : "Docker Summary",
-      "layout" : "d-w=3&d-h=2&d-pad=5&d-bg=none&d-g-DOCKER_TOTAL_CPU_USAGE=0-0-1-1&d-g-DOCKER_TOTAL_MEMORY_USAGE=1-0-1-1&d-g-DOCKER_MEAN_MEMORY_USAGE=2-0-1-1&d-g-DOCKER_MAX_MEMORY_USAGE=0-1-1-1-t&d-g-DOCKER_MIN_MEMORY_USAGE=0-1-1-1-b&d-g-DOCKER_NETWORK_RX_BYTES=1-1-1-1&d-g-DOCKER_NETWORK_TX_BYTES=2-1-1-1"
+      "layout" : "d-w=3&d-h=2&d-pad=5&d-bg=none&d-g-DOCKER_TOTAL_CPU_USAGE=0-0-1-1&d-g-DOCKER_MEMORY_USAGE_PERCENT=1-0-1-1&d-g-DOCKER_MEMORY_USAGE_BYTES=2-0-1-1&d-g-DOCKER_NETWORK_RX_ERRORS=0-1-1-1-t&d-g-DOCKER_NETWORK_TX_ERRORS=0-1-1-1-b&d-g-DOCKER_NETWORK_RX_BYTES=1-1-1-1&d-g-DOCKER_NETWORK_TX_BYTES=2-1-1-1"
     }
   ],
   "paramSchema": [
