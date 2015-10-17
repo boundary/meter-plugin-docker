@@ -1,5 +1,5 @@
 {
-  "DOCKER_MEAN_MEMORY_USAGE": {
+  "DOCKER_MEAN_MEMORY_USAGE_BYTES'": {
     "defaultAggregate": "avg",
     "defaultResolutionMS": 1000,
     "description": "Docker mean memory usage - all running containers",
