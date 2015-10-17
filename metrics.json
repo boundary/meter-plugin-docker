@@ -1,11 +1,19 @@
 {
-  "DOCKER_MEAN_MEMORY_USAGE_BYTES'": {
+  "DOCKER_MEMORY_USAGE_BYTES": {
     "defaultAggregate": "avg",
     "defaultResolutionMS": 1000,
-    "description": "Docker mean memory usage - all running containers",
-    "displayName": "Docker mean memory usage",
-    "displayNameShort": "DK MEAN MEM",
+    "description": "Docker Total memory usage - all running containers",
+    "displayName": "Docker Total memory usage",
+    "displayNameShort": "DK MEM BYTES",
     "unit": "bytecount"
+  },
+  "DOCKER_MEMORY_USAGE_PERCENT'": {
+    "defaultAggregate": "avg",
+    "defaultResolutionMS": 1000,
+    "description": "Docker memory usage percent - all running containers",
+    "displayName": "Docker  memory usage percent",
+    "displayNameShort": "DK MEM %",
+    "unit": "percent"
   },
   "DOCKER_TOTAL_CPU_USAGE": {
     "defaultAggregate": "avg",
@@ -14,14 +22,6 @@
     "displayName": "Docker total cpu usage",
     "displayNameShort": "DK TOTAL CPU",
     "unit": "percent"
-  },
-  "DOCKER_TOTAL_MEMORY_USAGE": {
-    "defaultAggregate": "avg",
-    "defaultResolutionMS": 1000,
-    "description": "Docker Total memory usage - all running containers",
-    "displayName": "Docker Total memory usage",
-    "displayNameShort": "DK TOTAL MEM",
-    "unit": "bytecount"
   },
   "DOCKER_NETWORK_RX_BYTES": {
     "defaultAggregate": "avg",

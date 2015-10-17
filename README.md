@@ -43,8 +43,8 @@ $ sudo service docker restart
 |Metric Name          |Description                       |
 |:--------------------|:---------------------------------|
 | DOCKER_TOTAL_CPU_USAGE | Docker total cpu usage, total and per running containers |
-| DOCKER_TOTAL_MEMORY_USAGE_BYTES | Docker total memory usage, total and per running containers |
-| DOCKER_MEAN_MEMORY_USAGE | Docker mean memory usage, all running containers |
+| DOCKER__MEMORY_USAGE_BYTES | Docker total memory usage, total and per running containers |
+| DOCKET_MEMORY_USAGE_PERCENT | Docker memory usage percentage. |
 | DOCKER_NETWORK_RX_BYTES | Docker total network rx bytes |
 | DOCKER_NETWORK_TX_BYTES | Docker total network tx bytes |
 | DOCKER_NETWORK_TX_PACKETS | Docker total network tx packets |

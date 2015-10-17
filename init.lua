@@ -24,6 +24,7 @@ local round = framework.util.round
 local ipack = framework.util.ipack
 local mean = framework.util.mean
 local sum = framework.util.mean
+local ratio = framework.util.ratio
 
 local params = framework.params
 
@@ -97,7 +98,8 @@ function plugin:onParseValues(data, extra)
   local total_cpu_usage = parsed.cpu_stats.cpu_usage.total_usage/(10^13)
   local memory_limit = parsed.memory_stats.limit
   metric('DOCKER_TOTAL_CPU_USAGE', total_cpu_usage, nil, source)
-  metric('DOCKER_TOTAL_MEMORY_USAGE_BYTES', round(parsed.memory_stats.usage, 2), nil, source)
+  metric('DOCKER_MEMORY_USAGE_BYTES', round(parsed.memory_stats.usage, 2), nil, source)
+  metric('DOCKET_MEMORY_USAGE_PERCENT', round(ratio(parsed.memory_stats.usage, memory_limit), 4), nil, source)
   metric('DOCKER_NETWORK_RX_BYTES', round(parsed.network.rx_bytes, 2), nil, source)
   metric('DOCKER_NETWORK_TX_BYTES', round(parsed.network.tx_bytes, 2), nil, source)
   metric('DOCKER_NETWORK_RX_PACKETS', round(parsed.network.rx_packets, 2), nil, source)
@@ -126,7 +128,7 @@ function plugin:onParseValues(data, extra)
   -- Output aggregated metrics from all containers
   if not hasAny(pending_requests) then
     metric('DOCKER_TOTAL_CPU_USAGE', sum(stats.cpu_usage))
-    metric('DOCKER_TOTAL_MEMORY_USAGE_BYTES', stats.total_memory_usage)
+    metric('DOCKER_MEMORY_USAGE_BYTES', stats.total_memory_usage)
 --    metric('DOCKER_MEAN_MEMORY_USAGE', mean(stats.memory))
     metric('DOCKER_NETWORK_RX_BYTES', stats.total_rx_bytes)
     metric('DOCKER_NETWORK_TX_BYTES', stats.total_tx_bytes)
