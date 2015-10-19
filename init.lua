@@ -23,8 +23,9 @@ local notEmpty = framework.string.notEmpty
 local round = framework.util.round
 local ipack = framework.util.ipack
 local mean = framework.util.mean
-local sum = framework.util.mean
+local sum = framework.util.sum
 local ratio = framework.util.ratio
+local toSet = framework.table.toSet
 
 local params = framework.params
 
@@ -32,18 +33,6 @@ local options = {}
 options.host = notEmpty(params.host, '127.0.0.1')
 options.port = notEmpty(params.port, '2375')
 options.path = '/containers/json'
-
-local function maxmin(t)
-  local max = -math.huge
-  local min = math.huge
-  for k,v in pairs( t ) do
-    if type(v) == 'number' then
-      max = math.max( max, v )
-      min = math.min( min, v )
-    end
-  end
-  return max, min
-end
 
 local function getName(fullName) 
   return string.sub(fullName, 2, -1)
@@ -63,6 +52,7 @@ local function createDataSource(context, container)
   opts.meta = container.name
   opts.path = ('/containers/%s/stats'):format(container.name)
   local data_source = WebRequestDataSource:new(opts)
+  data_source:propagate('info', context)
   data_source:propagate('error', context)
   pending_requests[container.name] = true
 
@@ -72,7 +62,17 @@ end
 local ds = WebRequestDataSource:new(options)
 ds:chain(function (context, callback, data) 
   local parsed = json:decode(data)
-  local data_sources = map(function (container) return createDataSource(context, container) end, getContainers(parsed))
+  if #parsed == 0 then
+     context:emit('info', 'There aren\'t any containers running.') 
+  end
+  local data_sources = {}
+  local containers_filter = toSet(params.containers)
+  local containers = getContainers(parsed)
+  for _, c in ipairs(containers) do
+    if not containers_filter or containers_filter[c.name] then
+      table.insert(data_sources, createDataSource(context, c))
+    end
+  end
   return data_sources
 end)
 
@@ -99,7 +99,7 @@ function plugin:onParseValues(data, extra)
   local memory_limit = parsed.memory_stats.limit
   metric('DOCKER_TOTAL_CPU_USAGE', total_cpu_usage, nil, source)
   metric('DOCKER_MEMORY_USAGE_BYTES', round(parsed.memory_stats.usage, 2), nil, source)
-  metric('DOCKET_MEMORY_USAGE_PERCENT', round(ratio(parsed.memory_stats.usage, memory_limit), 4), nil, source)
+  metric('DOCKET_MEMORY_USAGE_PERCENT', round(ratio(parsed.memory_stats.usage, memory_limit)*100, 4), nil, source)
   metric('DOCKER_NETWORK_RX_BYTES', round(parsed.network.rx_bytes, 2), nil, source)
   metric('DOCKER_NETWORK_TX_BYTES', round(parsed.network.tx_bytes, 2), nil, source)
   metric('DOCKER_NETWORK_RX_PACKETS', round(parsed.network.rx_packets, 2), nil, source)
