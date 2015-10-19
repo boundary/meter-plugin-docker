@@ -60,6 +60,9 @@ end
 local ds = WebRequestDataSource:new(options)
 ds:chain(function (context, callback, data) 
   local parsed = json:decode(data)
+  if #parsed == 0 then
+     context:emit('error', 'There aren\'t any containers running.') 
+  end
   local data_sources = map(function (container) return createDataSource(context, container) end, getContainers(parsed))
   return data_sources
 end)
