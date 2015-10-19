@@ -51,6 +51,7 @@ local function createDataSource(context, container)
   opts.meta = container.name
   opts.path = ('/containers/%s/stats'):format(container.name)
   local data_source = WebRequestDataSource:new(opts)
+  data_source:propagate('info', context)
   data_source:propagate('error', context)
   pending_requests[container.name] = true
 
@@ -61,7 +62,7 @@ local ds = WebRequestDataSource:new(options)
 ds:chain(function (context, callback, data) 
   local parsed = json:decode(data)
   if #parsed == 0 then
-     context:emit('error', 'There aren\'t any containers running.') 
+     context:emit('info', 'There aren\'t any containers running.') 
   end
   local data_sources = map(function (container) return createDataSource(context, container) end, getContainers(parsed))
   return data_sources
