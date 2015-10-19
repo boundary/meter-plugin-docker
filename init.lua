@@ -25,6 +25,7 @@ local ipack = framework.util.ipack
 local mean = framework.util.mean
 local sum = framework.util.sum
 local ratio = framework.util.ratio
+local toSet = framework.table.toSet
 
 local params = framework.params
 
@@ -64,7 +65,14 @@ ds:chain(function (context, callback, data)
   if #parsed == 0 then
      context:emit('info', 'There aren\'t any containers running.') 
   end
-  local data_sources = map(function (container) return createDataSource(context, container) end, getContainers(parsed))
+  local data_sources = {}
+  local containers_filter = toSet(params.containers)
+  local containers = getContainers(parsed)
+  for _, c in ipairs(containers) do
+    if not containers_filter or containers_filter[c.name] then
+      table.insert(data_sources, createDataSource(context, c))
+    end
+  end
   return data_sources
 end)
 

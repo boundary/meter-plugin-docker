@@ -47,6 +47,17 @@
       "required" : true
     },
     {
+      "title": "Containers",
+      "name": "containers",
+      "description": "Filter containers by name. If empty, it will show all containers.",
+      "type": "array",
+      "items": {
+	"type": "string"
+      },
+      "default": [],
+      "required": false
+    },
+    {
       "title": "Poll Interval (ms)",
       "name": "pollInterval",
       "description": "The Poll Interval (in milliseconds) to poll for metrics.",

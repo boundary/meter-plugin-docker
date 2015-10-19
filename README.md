@@ -33,9 +33,10 @@ $ sudo service docker restart
 
 |Field Name|Description                                                |
 |:---------|:----------------------------------------------------------|
-|Host      |The Docker Daemon hostname.                                    |
-|Port      |The Docker Daemon port.                                        |
-|Poll Interval | How often (in milliseconds) to poll for metrics. |
+|Host      |The Docker Daemon hostname                                    |
+|Port      |The Docker Daemon port                                        |
+|Containers | Filter containers by name. If empty, it will show all containers |
+|Poll Interval | How often (in milliseconds) to poll for metrics |
 |Source | The source to display in the legend for the data. |
 
 ### Metrics Collected
