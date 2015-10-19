@@ -23,7 +23,7 @@ local notEmpty = framework.string.notEmpty
 local round = framework.util.round
 local ipack = framework.util.ipack
 local mean = framework.util.mean
-local sum = framework.util.mean
+local sum = framework.util.sum
 local ratio = framework.util.ratio
 
 local params = framework.params
@@ -32,18 +32,6 @@ local options = {}
 options.host = notEmpty(params.host, '127.0.0.1')
 options.port = notEmpty(params.port, '2375')
 options.path = '/containers/json'
-
-local function maxmin(t)
-  local max = -math.huge
-  local min = math.huge
-  for k,v in pairs( t ) do
-    if type(v) == 'number' then
-      max = math.max( max, v )
-      min = math.min( min, v )
-    end
-  end
-  return max, min
-end
 
 local function getName(fullName) 
   return string.sub(fullName, 2, -1)

@@ -8,7 +8,7 @@ Collects metrics from the Docker daemon using the remote api.
 |:----------|:-----:|:-------:|:-------:|:----:|
 | Supported |   v   |    v    |    v    |  v   |
 
-This plugin is compatible with Docket 1.7.1 or later.
+This plugin is compatible with Docker 1.7.1 or later.
 
 #### Boundary Meter versions v4.2 or later 
 
@@ -48,7 +48,7 @@ $ sudo service docker restart
 | DOCKER_NETWORK_RX_BYTES | Docker total network rx bytes |
 | DOCKER_NETWORK_TX_BYTES | Docker total network tx bytes |
 | DOCKER_NETWORK_TX_PACKETS | Docker total network tx packets |
-| DOCKER_NETWORK_RX_PACKETS | Docker total network tx packets |
+| DOCKER_NETWORK_RX_PACKETS | Docker total network rx packets |
 | DOCKER_NETWORK_RX_ERRORS | Docker total network rx errors |
 | DOCKER_NETWORK_TX_ERRORS | Docker total network tx errors |
 
