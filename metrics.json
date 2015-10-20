@@ -7,7 +7,7 @@
     "displayNameShort": "DK MEM BYTES",
     "unit": "bytecount"
   },
-  "DOCKER_MEMORY_USAGE_PERCENT'": {
+  "DOCKER_MEMORY_USAGE_PERCENT": {
     "defaultAggregate": "avg",
     "defaultResolutionMS": 1000,
     "description": "Docker memory usage percent - all running containers",
