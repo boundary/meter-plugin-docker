@@ -78,5 +78,21 @@
     "displayName": "Docker network TX errors",
     "displayNameShort": "DK NET TX ERRORS",
     "unit": "number"
+  },
+  "DOCKER_BLOCK_IO_READ_BYTES": {
+    "defaultAggregate": "avg",
+    "defaultResolutionMS": 1000,
+    "description": "Docker block io read bytes",
+    "displayName": "Docker block io read bytes",
+    "displayNameShort": "DK BLK IO READ",
+    "unit": "bytecount"
+  },
+  "DOCKER_BLOCK_IO_WRITE_BYTES": {
+    "defaultAggregate": "avg",
+    "defaultResolutionMS": 1000,
+    "description": "Docker block io write bytes",
+    "displayName": "Docker block io write bytes",
+    "displayNameShort": "DK BLK IO WRITE",
+    "unit": "bytecount"
   }
 }

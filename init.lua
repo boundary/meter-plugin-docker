@@ -83,6 +83,19 @@ local function resetStats()
   return stats
 end
 
+local function calculateBlockIO(stats)
+  local read = 0
+  local write = 0
+  for _, io in ipairs(stats.io_service_bytes_recursive) do
+    if (io.op:lower() == 'read') then
+      read = read + io.value
+    elseif (io.op:lower() == 'write') then
+      write = write + io.value
+    end
+  end
+  return read, write
+end
+
 local stats = resetStats()
 local plugin = Plugin:new(params, ds)
 function plugin:onParseValues(data, extra)
@@ -97,6 +110,9 @@ function plugin:onParseValues(data, extra)
   local source = self.source .. '.' .. extra.info
   local total_cpu_usage = parsed.cpu_stats.cpu_usage.total_usage/(10^13)
   local memory_limit = parsed.memory_stats.limit
+  local blk_reads, blk_writes = calculateBlockIO(parsed.blkio_stats) 
+  metric('DOCKER_BLOCK_IO_READ_BYTES', blk_reads, nil, source)
+  metric('DOCKET_BLOCK_IO_WRITE_BYTES', blk_writes, nil, source)
   metric('DOCKER_TOTAL_CPU_USAGE', total_cpu_usage, nil, source)
   metric('DOCKER_MEMORY_USAGE_BYTES', parsed.memory_stats.usage, nil, source)
   metric('DOCKET_MEMORY_LIMIT_BYTES', memory_limit, nil, source)
