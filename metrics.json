@@ -2,23 +2,31 @@
   "DOCKER_MEMORY_USAGE_BYTES": {
     "defaultAggregate": "avg",
     "defaultResolutionMS": 1000,
-    "description": "Docker Total memory usage - all running containers",
+    "description": "Docker Total memory usage",
     "displayName": "Docker Total memory usage",
     "displayNameShort": "DK MEM BYTES",
     "unit": "bytecount"
   },
-  "DOCKER_MEMORY_USAGE_PERCENT'": {
+  "DOCKER_MEMORY_LIMIT_BYTES": {
     "defaultAggregate": "avg",
     "defaultResolutionMS": 1000,
-    "description": "Docker memory usage percent - all running containers",
-    "displayName": "Docker  memory usage percent",
+    "description": "Docker Total memory limit",
+    "displayName": "Docker Total memory limit",
+    "displayNameShort": "DK MEM LIMIT BYTES",
+    "unit": "bytecount"
+  },
+  "DOCKER_MEMORY_USAGE_PERCENT": {
+    "defaultAggregate": "avg",
+    "defaultResolutionMS": 1000,
+    "description": "Docker memory usage %",
+    "displayName": "Docker  memory usage %",
     "displayNameShort": "DK MEM %",
     "unit": "percent"
   },
   "DOCKER_TOTAL_CPU_USAGE": {
     "defaultAggregate": "avg",
     "defaultResolutionMS": 1000,
-    "description": "Total CPU usage - all running containers",
+    "description": "Total CPU usage",
     "displayName": "Docker total cpu usage",
     "displayNameShort": "DK TOTAL CPU",
     "unit": "percent"
@@ -26,39 +34,39 @@
   "DOCKER_NETWORK_RX_BYTES": {
     "defaultAggregate": "avg",
     "defaultResolutionMS": 1000,
-    "description": "Docker network i/o - all running containers",
-    "displayName": "Docker network i/oi RX",
-    "displayNameShort": "DK TOTAL NETWORK RX",
+    "description": "Docker network i/o RX",
+    "displayName": "Docker network i/o RX",
+    "displayNameShort": "DK TOTAL NET RX BYTES",
     "unit": "bytecount"
   },
   "DOCKER_NETWORK_TX_BYTES": {
     "defaultAggregate": "avg",
     "defaultResolutionMS": 1000,
-    "description": "Docker network i/o - all running containers",
+    "description": "Docker network i/o TX",
     "displayName": "Docker network i/o TX",
-    "displayNameShort": "DK TOTAL NETWORK TX",
-    "unit": "number"
+    "displayNameShort": "DK TOTAL NET TX BYTES",
+    "unit": "bytecount"
   },
   "DOCKER_NETWORK_RX_PACKETS": {
     "defaultAggregate": "avg",
     "defaultResolutionMS": 1000,
-    "description": "Docker network RX packets - all running containers",
-    "displayName": "Docker network i/o RX packets'",
+    "description": "Docker network RX packets",
+    "displayName": "Docker network RX packets'",
     "displayNameShort": "DK NET PCKTS RX",
     "unit": "number"
   },
   "DOCKER_NETWORK_TX_PACKETS": {
     "defaultAggregate": "avg",
     "defaultResolutionMS": 1000,
-    "description": "Docker network TX packets - all running containers",
-    "displayName": "Docker network i/o TX packets",
+    "description": "Docker network TX packets",
+    "displayName": "Docker network TX packets",
     "displayNameShort": "DK NET PCKTS RX",
     "unit": "number"
   },
   "DOCKER_NETWORK_RX_ERRORS": {
     "defaultAggregate": "avg",
     "defaultResolutionMS": 1000,
-    "description": "Docker network RX errors - all running containers",
+    "description": "Docker network RX errors",
     "displayName": "Docker network RX errors",
     "displayNameShort": "DK NET RX ERRORS",
     "unit": "number"
@@ -66,9 +74,25 @@
   "DOCKER_NETWORK_TX_ERRORS": {
     "defaultAggregate": "avg",
     "defaultResolutionMS": 1000,
-    "description": "Docker network i/o TX errors - all running containers",
-    "displayName": "Docker network i/o TX errors",
-    "displayNameShort": "DK NETWORK TX ERRORS",
+    "description": "Docker network TX errors",
+    "displayName": "Docker network TX errors",
+    "displayNameShort": "DK NET TX ERRORS",
     "unit": "number"
+  },
+  "DOCKER_BLOCK_IO_READ_BYTES": {
+    "defaultAggregate": "avg",
+    "defaultResolutionMS": 1000,
+    "description": "Docker block io read bytes",
+    "displayName": "Docker block io read bytes",
+    "displayNameShort": "DK BLK IO READ",
+    "unit": "bytecount"
+  },
+  "DOCKER_BLOCK_IO_WRITE_BYTES": {
+    "defaultAggregate": "avg",
+    "defaultResolutionMS": 1000,
+    "description": "Docker block io write bytes",
+    "displayName": "Docker block io write bytes",
+    "displayNameShort": "DK BLK IO WRITE",
+    "unit": "bytecount"
   }
 }

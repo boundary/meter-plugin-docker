@@ -43,15 +43,17 @@ $ sudo service docker restart
 
 |Metric Name          |Description                       |
 |:--------------------|:---------------------------------|
-| DOCKER_TOTAL_CPU_USAGE | Docker total cpu usage, total and per running containers |
-| DOCKER_MEMORY_USAGE_BYTES | Docker total memory usage, total and per running containers |
-| DOCKET_MEMORY_USAGE_PERCENT | Docker memory usage percentage. |
-| DOCKER_NETWORK_RX_BYTES | Docker total network rx bytes |
-| DOCKER_NETWORK_TX_BYTES | Docker total network tx bytes |
-| DOCKER_NETWORK_TX_PACKETS | Docker total network tx packets |
-| DOCKER_NETWORK_RX_PACKETS | Docker total network rx packets |
-| DOCKER_NETWORK_RX_ERRORS | Docker total network rx errors |
-| DOCKER_NETWORK_TX_ERRORS | Docker total network tx errors |
+| DOCKER_TOTAL_CPU_USAGE | Total cpu usage, total and per running containers |
+| DOCKER_MEMORY_USAGE_BYTES | Total memory usage, total and per running containers |
+| DOCKET_MEMORY_USAGE_PERCENT | Memory usage percentage. |
+| DOCKER_NETWORK_RX_BYTES | Total network rx bytes |
+| DOCKER_NETWORK_TX_BYTES | Total network tx bytes |
+| DOCKER_NETWORK_TX_PACKETS | Total network tx packets |
+| DOCKER_NETWORK_RX_PACKETS | Total network rx packets |
+| DOCKER_NETWORK_RX_ERRORS | Total network rx errors |
+| DOCKER_NETWORK_TX_ERRORS | Total network tx errors |
+| DOCKER_BLOCK_IO_READ_BYTES | Total number of Block IO reads bytes |
+| DOCKER_BLOCK_IO_WRITE_BYTES | Total number of Block IO writes bytes |
 
 ### Dashboards
 
