@@ -1,5 +1,7 @@
 {
 	"pollInterval": 1000,
 	"host": "localhost",
-	"port": 2375
+	"port": 2375,
+	"containers" : [
+	]
 }

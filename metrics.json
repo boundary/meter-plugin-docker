@@ -7,6 +7,14 @@
     "displayNameShort": "DK MEM BYTES",
     "unit": "bytecount"
   },
+  "DOCKER_MEMORY_LIMIT_BYTES": {
+    "defaultAggregate": "avg",
+    "defaultResolutionMS": 1000,
+    "description": "Docker Total memory limit",
+    "displayName": "Docker Total memory limit",
+    "displayNameShort": "DK MEM LIMIT BYTES",
+    "unit": "bytecount"
+  },
   "DOCKER_MEMORY_USAGE_PERCENT": {
     "defaultAggregate": "avg",
     "defaultResolutionMS": 1000,
