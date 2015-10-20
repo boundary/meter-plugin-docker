@@ -50,7 +50,7 @@ local pending_requests = {}
 local function createDataSource(context, container)
   local opts = clone(options)
   opts.meta = container.name
-  opts.path = ('/containers/%s/stats'):format(container.name)
+  opts.path = ('/containers/%s/stats?stream=false'):format(container.name)
   local data_source = WebRequestDataSource:new(opts)
   data_source:propagate('info', context)
   data_source:propagate('error', context)
@@ -83,6 +83,17 @@ local function resetStats()
   return stats
 end
 
+local function calculateCpuUsage(pre, cur)
+  local cpu_percent = 0
+
+  local delta_system_cpu_usage = cur.system_cpu_usage - pre.system_cpu_usage 
+  local delta_cpu_usage = cur.cpu_usage.total_usage - pre.cpu_usage.total_usage  
+  if (delta_system_cpu_usage > 0 and delta_cpu_usage > 0) then
+    cpu_percent = delta_cpu_usage / delta_system_cpu_usage * #cur.cpu_usage.percpu_usage
+  end
+  return cpu_percent 
+end
+
 local function calculateBlockIO(stats)
   local read = 0
   local write = 0
@@ -108,7 +119,7 @@ function plugin:onParseValues(data, extra)
   -- Output metrics for each container
   pending_requests[extra.info] = nil
   local source = self.source .. '.' .. extra.info
-  local total_cpu_usage = parsed.cpu_stats.cpu_usage.total_usage/(10^13)
+  local total_cpu_usage = calculateCpuUsage(parsed.precpu_stats, parsed.cpu_stats)
   local memory_limit = parsed.memory_stats.limit
   local blk_reads, blk_writes = calculateBlockIO(parsed.blkio_stats) 
   metric('DOCKER_BLOCK_IO_READ_BYTES', blk_reads, nil, source)
@@ -123,18 +134,9 @@ function plugin:onParseValues(data, extra)
   metric('DOCKER_NETWORK_TX_PACKETS', round(parsed.network.tx_packets, 2), nil, source)
   metric('DOCKER_NETWORK_RX_ERRORS', parsed.network.rx_errors, nil, source)
   metric('DOCKER_NETWORK_TX_ERRORS', parsed.network.tx_errors, nil, source)
-  table.insert(stats.memory, parsed.memory_stats.usage)
-  table.insert(stats.cpu_usage, total_cpu_usage)
-  local percpu_usage = parsed.cpu_stats.cpu_usage.percpu_usage
-  if (type(percpu_usage) == 'table') then
-    for i=1, table.getn(percpu_usage) do
-      local value = percpu_usage[i]/10^13
-      metric('DOCKER_TOTAL_CPU_USAGE', value, nil, source .. '-C' .. i)
-    end
-  end
 
   stats.total_memory_usage = (stats.total_memory_usage or 0) + parsed.memory_stats.usage
-  stats.total_cpu_usage = (stats.total_cpu_usage or 0) + parsed.cpu_stats.cpu_usage.total_usage/10^12
+  stats.total_cpu_usage = (stats.total_cpu_usage or 0) + total_cpu_usage
   stats.total_rx_bytes = (stats.total_rx_bytes or 0) + parsed.network.rx_bytes
   stats.total_tx_bytes = (stats.total_tx_bytes or 0) + parsed.network.tx_bytes
   stats.total_rx_packets = (stats.total_rx_packets or 0) + parsed.network.rx_packets
@@ -144,7 +146,7 @@ function plugin:onParseValues(data, extra)
 
   -- Output aggregated metrics from all containers
   if not hasAny(pending_requests) then
-    metric('DOCKER_TOTAL_CPU_USAGE', sum(stats.cpu_usage))
+    metric('DOCKER_TOTAL_CPU_USAGE', stats.total_cpu_usage)
     metric('DOCKER_MEMORY_USAGE_BYTES', stats.total_memory_usage)
     metric('DOCKER_NETWORK_RX_BYTES', stats.total_rx_bytes)
     metric('DOCKER_NETWORK_TX_BYTES', stats.total_tx_bytes)
