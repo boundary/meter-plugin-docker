@@ -45,7 +45,7 @@ $ sudo service docker restart
 |:--------------------|:---------------------------------|
 | DOCKER_TOTAL_CPU_USAGE | Total cpu usage, total and per running containers |
 | DOCKER_MEMORY_USAGE_BYTES | Total memory usage, total and per running containers |
-| DOCKET_MEMORY_USAGE_PERCENT | Memory usage percentage. |
+| DOCKER_MEMORY_USAGE_PERCENT | Memory usage percentage. |
 | DOCKER_NETWORK_RX_BYTES | Total network rx bytes |
 | DOCKER_NETWORK_TX_BYTES | Total network tx bytes |
 | DOCKER_NETWORK_TX_PACKETS | Total network tx packets |

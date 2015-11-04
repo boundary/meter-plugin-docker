@@ -89,7 +89,7 @@ local function calculateCpuUsage(pre, cur)
   local delta_system_cpu_usage = cur.system_cpu_usage - pre.system_cpu_usage 
   local delta_cpu_usage = cur.cpu_usage.total_usage - pre.cpu_usage.total_usage  
   if (delta_system_cpu_usage > 0 and delta_cpu_usage > 0) then
-    cpu_percent = delta_cpu_usage / delta_system_cpu_usage * #cur.cpu_usage.percpu_usage
+    cpu_percent = (delta_cpu_usage / delta_system_cpu_usage) * #cur.cpu_usage.percpu_usage
   end
   return cpu_percent 
 end

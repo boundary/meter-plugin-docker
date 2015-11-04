@@ -41,6 +41,7 @@ local querystring = require('querystring')
 local boundary = require('boundary')
 local io = require('io')
 local hrtime = require('uv').Process.hrtime
+local utils = require('utils')
 
 local callable = function (class, func)
   class.meta.__call = func 
@@ -53,7 +54,7 @@ local factory = function (class)
   end
 end
 
-framework.version = '0.9.10'
+framework.version = '0.10.0'
 framework.boundary = boundary
 framework.params = boundary.param or json.parse(fs.readFileSync('param.json')) or {}
 framework.plugin_params = boundary.plugin or json.parse(fs.readFileSync('plugin.json')) or {}
@@ -65,6 +66,127 @@ framework.functional = {}
 framework.table = {}
 framework.util = {}
 framework.http = {}
+
+local EventTracker = Object:extend()
+function EventTracker:initialize(delay)
+  self.delay = delay or 5 * 60
+  self.events = {}
+end
+
+function EventTracker:hash(event)
+  return string.format("%s_%s_%s", event.type, event.msg, event.source)
+end
+
+function EventTracker:track(event)
+  local hash = self:hash(event)
+  local time = os.time() + self.delay 
+  self.events[hash] = time  
+end
+
+function EventTracker:canEmit(event, time)
+  local hash = self:hash(event)
+  local next_time = self.events[hash]
+  local result = (not next_time) or next_time <= time
+  return result
+end
+
+local Logger = Object:extend()
+Logger.CRITICAL = 50
+Logger.ERROR = 40
+Logger.WARNING = 30
+Logger.INFO = 20
+Logger.DEBUG = 10
+Logger.NOTSET = 0
+
+Logger.level_map = {
+  critical = Logger.CRITICAL,
+  error = Logger.ERROR,
+  warning = Logger.WARNING,
+  info = Logger.INFO,
+  debug = Logger.DEBUG,
+  notset = Logger.NOTSET
+}
+
+function Logger.parseLevel(level)
+  return tonumber(level) or Logger.level_map[level] or Logger.NOTSET
+end
+
+function Logger:initialize(stream, level)
+  self.out = stream
+  self.levels = {}
+  self.levels[Logger.CRITICAL] = self.critical
+  self.levels[Logger.ERROR] = self.error
+  self.levels[Logger.WARNING] = self.warning
+  self.levels[Logger.INFO] = self.info
+  self.levels[Logger.DEBUG] = self.debug
+  self:setLevel(level)
+end
+
+function Logger:isEnabledFor(level)
+  return level <= self.level 
+end
+
+function Logger:setLevel(level)
+  self.level = level or Logger.NOTSET
+end
+
+function Logger:dump(args)
+  return args and utils.dump(args, nil, true) or ''
+end
+
+function Logger:write(level_string, message, args)
+  local formatted = ('%s:\t%s %s\n'):format(level_string, message, self:dump(args))
+  self.out:write(formatted)
+end
+
+function Logger:info(message, args)
+  if self:isEnabledFor(Logger.INFO) then
+    self:write('INFO', message, args) 
+  end
+end
+
+function Logger:warning(message, args)
+  if self:isEnabledFor(Logger.WARNING) then
+    self:write('WARNING', message, args)
+  end
+end
+
+function Logger:debug(message, args)
+  if self:isEnabledFor(Logger.DEBUG) then
+    self:write('DEBUG', message, args)
+  end
+end
+
+function Logger:error(message, args)
+  if self:isEnabledFor(Logger.ERROR) then
+    self:write('ERROR', message, args)
+  end
+end
+
+function Logger:critical(message, args)
+  if self:isEnabledFor(Logger.CRITICAL) then
+    self:write('CRITICAL', message, args)
+  end
+end
+
+function Logger:exception(message, args)
+  if self:isEnabledFor(Logger.ERROR) then
+    self:write('ERROR', message, args)   
+  end
+end
+
+function Logger:log(level, message, args)
+  local func = self.levels[level]
+  if func and self:isEnabledFor(level) then
+    func(self, message, args)
+  end
+end
+
+framework.Logger = Logger
+
+local function getDefaultLogger(level)
+  return Logger:new(process.stderr, Logger.parseLevel(level))
+end
 
 do
   local encode_alphabet = {
@@ -322,7 +444,6 @@ function framework.util.parseUrl(url, parseQueryString)
     host = host,
     hostname = hostname,
     port = port,
-    path = path or '/',
     pathname = pathname or '/',
     search = search,
     query = query,
@@ -538,6 +659,13 @@ end
 -- @return true if status code is a success one.
 function framework.util.isHttpSuccess(status)
   return status >= 200 and status < 300
+end
+
+-- Check if an HTTP Status code is of a redirect kind.
+-- @param status the status code number
+-- @return true if status code is a redirect one.
+function framework.util.isHttpRedirect(status)
+  return status >= 300 and status < 400 
 end
 
 --- Round a number by the to the specified decimal places.
@@ -1140,6 +1268,8 @@ function Plugin:initialize(params, dataSource)
     self.tags = notEmpty(params.tags, '')
   end
 
+  self.event_tracker = EventTracker:new()
+
   self:on('error', function (err) self:error(err) end)
   self:on('info', function (obj) self:info(obj) end)
 end
@@ -1201,10 +1331,15 @@ function Plugin:handleEvent(eventType, obj)
     msg = tostring(obj)
   end
   local source = obj.source or self.source
-  if eventType == 'error' then
-    self:printError(self.source .. ' Error', self.source, source, msg)
-  else
-    self:printInfo(self.source .. ' Info', self.source, source, msg)
+  
+  local event = {type = eventType, source = source, msg = msg}
+  if self.event_tracker:canEmit(event, os.time()) then
+    self.event_tracker:track(event)
+    if eventType == 'error' then
+      self:printError(self.source .. ' Error', self.source, source, msg)
+    else
+      self:printInfo(self.source .. ' Info', self.source, source, msg)
+    end
   end
 end
 
@@ -1216,6 +1351,7 @@ function Plugin:error(obj)
 end
 
 function Plugin:info(obj)
+  
   self:handleEvent('info', obj)
 end
 
@@ -1401,6 +1537,9 @@ function WebRequestDataSource:initialize(params)
 
   self.options = options
   self.info = options.meta
+  self.follow_redirects = options.follow_redirects
+  self.max_redirects = options.max_redirects or 5
+  self.logger = getDefaultLogger(params.debug_level)
 end
 
 function WebRequestDataSource:onError(...)
@@ -1408,7 +1547,9 @@ function WebRequestDataSource:onError(...)
 end
 
 --- Fetch data from the initialized url
+local isHttpRedirect = framework.util.isHttpRedirect
 function WebRequestDataSource:fetch(context, callback, params)
+  self.logger:info('WebRequestDataSource:fetch()')
   assert(callback, 'WebRequestDataSource:fetch: callback is required')
 
   local start_time = hrtime()
@@ -1424,11 +1565,12 @@ function WebRequestDataSource:fetch(context, callback, params)
   local buffer = ''
 
   local success = function (res)
-    if self.wait_for_end then
+    if self.wait_for_end or isHttpRedirect(res.statusCode) then
       res:on('end', function ()
         local exec_time = hrtime() - start_time
         success, error = pcall(function () 
-          self:processResult(context, callback, buffer, {context = self, info = self.info, response_time = exec_time, status_code = res.statusCode}) end)
+          self.logger:debug('WebRequestDataSource:fetch() - Got response as', { headers = res.headers, status_code = res.statusCode, body = buffer })
+          self:processResult(context, callback, buffer, {context = self, info = self.info, response_time = exec_time, status_code = res.statusCode, max_redirects_reached = res.max_redirects_reached}) end)
         if not success then
           self:emit('error', error)
         end
@@ -1439,7 +1581,8 @@ function WebRequestDataSource:fetch(context, callback, params)
         local exec_time = hrtime() - start_time
         buffer = buffer .. data
         if not self.wait_for_end then
-          self:processResult(context, callback, buffer, {context = self, info = self.info, response_time = exec_time, status_code = res.statusCode})
+          self.logger:debug('WebRequestDataSource:fetch() - Got response as', { headers = res.headers, status_code = res.statusCode, body = buffer } )
+          self:processResult(context, callback, buffer, {context = self, info = self.info, response_time = exec_time, status_code = res.statusCode, max_redirects_reached = max_redirects_reached})
           res:destroy()
         end
       end)
@@ -1468,24 +1611,49 @@ function WebRequestDataSource:fetch(context, callback, params)
     options.headers['Content-Length'] = #body
   end
 
-  local req
-  options.protocol = notEmpty(options.protocol, 'http')
-  if string.lower(options.protocol) == 'https' then
-    req = https.request(options, success)
-  else
-    req = http.request(options, success)
-  end
+  local max_redirects = self.max_redirects or 5
+  local request
+  request = function (options, callback, max_redirects)
+    local handleResponse = function (res)
+      if self.follow_redirects and isHttpRedirect(res.statusCode) then
+        if max_redirects > 0 then
+          local location = res.headers.location
+          local location_opts = _url.parse(location)
+          local opts = {}
+          opts.method = options.method
+          opts.data = options.data
+          opts.headers  = options.headers
+          opts = merge(opts, location_opts)
+          self.logger:debug('WebRequestDataSource:fetch() - Redirecting to', location) 
+          request(opts, callback, max_redirects - 1)  -- Redirect to new url and maintain request options.
+        else
+          self.logger:debug('WebRequestDataSource:fetch() - Max redirects reached!', self.max_redirects)
+          self:emit('error', 'Max redirects reached!')
+          res.max_redirects_reached = true
+          callback(res)
+        end
+      else
+        callback(res)
+      end
+    end
+    options.protocol = notEmpty(options.protocol, 'http')
+    local service = string.lower(options.protocol) == 'https' and https or http 
+    self.logger:debug('WebRequestDataSource:fetch() - Sending an HTTP/HTTPS request using', options)
+    local req = service.request(options, handleResponse)
 
-  if body and #body > 0 then
-    req:write(body)
-  end
+    if body and #body > 0 then
+      self.logger:debug('WebRequestDataSource:fetch() - Sending data inside body as', body)
+      req:write(body)
+    end
 
-  req:propagate('error', self, function (err)
-    err.context = self
-    err.params = params
-    return err
-  end)
-  req:done()
+    req:propagate('error', self, function (err)
+      err.context = self
+      err.params = params
+      return err
+    end)
+    req:done()
+  end
+  request(options, success, self.max_redirects)
 end
 
 --- RandomDataSource class returns a random number each time it get called.
@@ -1650,3 +1818,5 @@ framework.PollerCollection = PollerCollection
 framework.MeterDataSource = MeterDataSource
 
 return framework
+
+
