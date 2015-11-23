@@ -51,7 +51,7 @@
     "defaultAggregate": "avg",
     "defaultResolutionMS": 1000,
     "description": "Docker network RX packets",
-    "displayName": "Docker network RX packets'",
+    "displayName": "Docker network RX packets",
     "displayNameShort": "DK NET PCKTS RX",
     "unit": "number"
   },
@@ -60,7 +60,7 @@
     "defaultResolutionMS": 1000,
     "description": "Docker network TX packets",
     "displayName": "Docker network TX packets",
-    "displayNameShort": "DK NET PCKTS RX",
+    "displayNameShort": "DK NET PCKTS TX",
     "unit": "number"
   },
   "DOCKER_NETWORK_RX_ERRORS": {
