@@ -13,6 +13,8 @@
 -- limitations under the License.
 
 local framework = require('framework')
+local http = require('http')
+local jsonParser = require('json')
 local Plugin = framework.Plugin
 local WebRequestDataSource = framework.WebRequestDataSource
 local json = require('_json')
@@ -34,12 +36,26 @@ options.host = notEmpty(params.host, '127.0.0.1')
 options.port = notEmpty(params.port, '2375')
 options.path = '/containers/json'
 
-local function getName(fullName) 
+local optionsCheckInfo = clone(options)
+optionsCheckInfo.path = '/info'
+
+local serverVersion = "NA"
+local infoQuery = http.request(optionsCheckInfo, function (res)
+  res:on('data', function (chunk)
+    --p("ondata", {chunk=chunk})
+    local json_data = jsonParser.parse(chunk)
+    serverVersion = json_data.ServerVersion
+    print(serverVersion)
+  end)
+end)
+infoQuery:done()
+
+local function getName(fullName)
   return string.sub(fullName, 2, -1)
 end
 
 local function containerTuple(c)
-  return { id = c.Id, name = getName(c.Names[1]) } 
+  return { id = c.Id, name = getName(c.Names[1]) }
 end
 
 local function getContainers(parsed)
@@ -60,10 +76,10 @@ local function createDataSource(context, container)
 end
 
 local ds = WebRequestDataSource:new(options)
-ds:chain(function (context, callback, data) 
+ds:chain(function (context, callback, data)
   local parsed = json:decode(data)
   if #parsed == 0 then
-     context:emit('info', 'There aren\'t any containers running.') 
+     context:emit('info', 'There aren\'t any containers running.')
   end
   local data_sources = {}
   local containers_filter = toSet(params.containers)
@@ -86,12 +102,12 @@ end
 local function calculateCpuUsage(pre, cur)
   local cpu_percent = 0
 
-  local delta_system_cpu_usage = cur.system_cpu_usage - pre.system_cpu_usage 
-  local delta_cpu_usage = cur.cpu_usage.total_usage - pre.cpu_usage.total_usage  
+  local delta_system_cpu_usage = cur.system_cpu_usage - pre.system_cpu_usage
+  local delta_cpu_usage = cur.cpu_usage.total_usage - pre.cpu_usage.total_usage
   if (delta_system_cpu_usage > 0 and delta_cpu_usage > 0) then
     cpu_percent = (delta_cpu_usage / delta_system_cpu_usage) * #cur.cpu_usage.percpu_usage
   end
-  return cpu_percent 
+  return cpu_percent
 end
 
 local function calculateBlockIO(stats)
@@ -113,7 +129,7 @@ function plugin:onParseValues(data, extra)
   local parsed = json:decode(data)
   local metrics = {}
   local metric = function (...)
-    ipack(metrics, ...) 
+    ipack(metrics, ...)
   end
 
   -- Output metrics for each container
@@ -121,19 +137,22 @@ function plugin:onParseValues(data, extra)
   local source = self.source .. '.' .. extra.info
   local total_cpu_usage = calculateCpuUsage(parsed.precpu_stats, parsed.cpu_stats)
   local memory_limit = parsed.memory_stats.limit
-  local blk_reads, blk_writes = calculateBlockIO(parsed.blkio_stats) 
+  local blk_reads, blk_writes = calculateBlockIO(parsed.blkio_stats)
   metric('DOCKER_BLOCK_IO_READ_BYTES', blk_reads, nil, source)
   metric('DOCKER_BLOCK_IO_WRITE_BYTES', blk_writes, nil, source)
   metric('DOCKER_TOTAL_CPU_USAGE', total_cpu_usage, nil, source)
   metric('DOCKER_MEMORY_USAGE_BYTES', parsed.memory_stats.usage, nil, source)
   metric('DOCKER_MEMORY_LIMIT_BYTES', memory_limit, nil, source)
   metric('DOCKER_MEMORY_USAGE_PERCENT', round(ratio(parsed.memory_stats.usage, memory_limit), 4), nil, source)
-  metric('DOCKER_NETWORK_RX_BYTES', round(parsed.network.rx_bytes, 2), nil, source)
-  metric('DOCKER_NETWORK_TX_BYTES', round(parsed.network.tx_bytes, 2), nil, source)
-  metric('DOCKER_NETWORK_RX_PACKETS', round(parsed.network.rx_packets, 2), nil, source)
-  metric('DOCKER_NETWORK_TX_PACKETS', round(parsed.network.tx_packets, 2), nil, source)
-  metric('DOCKER_NETWORK_RX_ERRORS', parsed.network.rx_errors, nil, source)
-  metric('DOCKER_NETWORK_TX_ERRORS', parsed.network.tx_errors, nil, source)
+
+  if (serverVersion == nil) then
+    metric('DOCKER_NETWORK_RX_BYTES', round(parsed.network.rx_bytes, 2), nil, source)
+    metric('DOCKER_NETWORK_TX_BYTES', round(parsed.network.tx_bytes, 2), nil, source)
+    metric('DOCKER_NETWORK_RX_PACKETS', round(parsed.network.rx_packets, 2), nil, source)
+    metric('DOCKER_NETWORK_TX_PACKETS', round(parsed.network.tx_packets, 2), nil, source)
+    metric('DOCKER_NETWORK_RX_ERRORS', parsed.network.rx_errors, nil, source)
+    metric('DOCKER_NETWORK_TX_ERRORS', parsed.network.tx_errors, nil, source)
+  end
 
   stats.total_memory_usage = (stats.total_memory_usage or 0) + parsed.memory_stats.usage
   stats.total_cpu_usage = (stats.total_cpu_usage or 0) + total_cpu_usage
@@ -155,7 +174,7 @@ function plugin:onParseValues(data, extra)
     metric('DOCKER_NETWORK_RX_ERRORS', stats.total_rx_errors)
     metric('DOCKER_NETWORK_TX_ERRORS', stats.total_tx_errors)
 
-    stats = resetStats() 
+    stats = resetStats()
   end
 
   return metrics
