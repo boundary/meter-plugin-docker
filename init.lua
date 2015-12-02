@@ -13,8 +13,6 @@
 -- limitations under the License.
 
 local framework = require('framework')
-local http = require('http')
-local jsonParser = require('json')
 local Plugin = framework.Plugin
 local WebRequestDataSource = framework.WebRequestDataSource
 local json = require('_json')
@@ -34,21 +32,7 @@ local params = framework.params
 local options = {}
 options.host = notEmpty(params.host, '127.0.0.1')
 options.port = notEmpty(params.port, '2375')
-options.path = '/containers/json'
-
-local optionsCheckInfo = clone(options)
-optionsCheckInfo.path = '/info'
-
-local serverVersion = "NA"
-local infoQuery = http.request(optionsCheckInfo, function (res)
-  res:on('data', function (chunk)
-    --p("ondata", {chunk=chunk})
-    local json_data = jsonParser.parse(chunk)
-    serverVersion = json_data.ServerVersion
-    print(serverVersion)
-  end)
-end)
-infoQuery:done()
+options.path = '/v1.19/containers/json'
 
 local function getName(fullName)
   return string.sub(fullName, 2, -1)
@@ -66,7 +50,7 @@ local pending_requests = {}
 local function createDataSource(context, container)
   local opts = clone(options)
   opts.meta = container.name
-  opts.path = ('/containers/%s/stats?stream=false'):format(container.name)
+  opts.path = ('/v1.19/containers/%s/stats?stream=false'):format(container.name)
   local data_source = WebRequestDataSource:new(opts)
   data_source:propagate('info', context)
   data_source:propagate('error', context)
@@ -144,15 +128,12 @@ function plugin:onParseValues(data, extra)
   metric('DOCKER_MEMORY_USAGE_BYTES', parsed.memory_stats.usage, nil, source)
   metric('DOCKER_MEMORY_LIMIT_BYTES', memory_limit, nil, source)
   metric('DOCKER_MEMORY_USAGE_PERCENT', round(ratio(parsed.memory_stats.usage, memory_limit), 4), nil, source)
-
-  if (serverVersion == nil) then
-    metric('DOCKER_NETWORK_RX_BYTES', round(parsed.network.rx_bytes, 2), nil, source)
-    metric('DOCKER_NETWORK_TX_BYTES', round(parsed.network.tx_bytes, 2), nil, source)
-    metric('DOCKER_NETWORK_RX_PACKETS', round(parsed.network.rx_packets, 2), nil, source)
-    metric('DOCKER_NETWORK_TX_PACKETS', round(parsed.network.tx_packets, 2), nil, source)
-    metric('DOCKER_NETWORK_RX_ERRORS', parsed.network.rx_errors, nil, source)
-    metric('DOCKER_NETWORK_TX_ERRORS', parsed.network.tx_errors, nil, source)
-  end
+  metric('DOCKER_NETWORK_RX_BYTES', round(parsed.network.rx_bytes, 2), nil, source)
+  metric('DOCKER_NETWORK_TX_BYTES', round(parsed.network.tx_bytes, 2), nil, source)
+  metric('DOCKER_NETWORK_RX_PACKETS', round(parsed.network.rx_packets, 2), nil, source)
+  metric('DOCKER_NETWORK_TX_PACKETS', round(parsed.network.tx_packets, 2), nil, source)
+  metric('DOCKER_NETWORK_RX_ERRORS', parsed.network.rx_errors, nil, source)
+  metric('DOCKER_NETWORK_TX_ERRORS', parsed.network.tx_errors, nil, source)
 
   stats.total_memory_usage = (stats.total_memory_usage or 0) + parsed.memory_stats.usage
   stats.total_cpu_usage = (stats.total_cpu_usage or 0) + total_cpu_usage
