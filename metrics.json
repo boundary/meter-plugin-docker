@@ -1,7 +1,7 @@
 {
   "DOCKER_MEMORY_USAGE_BYTES": {
     "defaultAggregate": "avg",
-    "defaultResolutionMS": 1000,
+    "defaultResolutionMS": 60000,
     "description": "Docker Total memory usage",
     "displayName": "Docker Total memory usage",
     "displayNameShort": "DK MEM BYTES",
@@ -9,7 +9,7 @@
   },
   "DOCKER_MEMORY_LIMIT_BYTES": {
     "defaultAggregate": "avg",
-    "defaultResolutionMS": 1000,
+    "defaultResolutionMS": 60000,
     "description": "Docker Total memory limit",
     "displayName": "Docker Total memory limit",
     "displayNameShort": "DK MEM LIMIT BYTES",
@@ -17,7 +17,7 @@
   },
   "DOCKER_MEMORY_USAGE_PERCENT": {
     "defaultAggregate": "avg",
-    "defaultResolutionMS": 1000,
+    "defaultResolutionMS": 60000,
     "description": "Docker memory usage %",
     "displayName": "Docker  memory usage %",
     "displayNameShort": "DK MEM %",
@@ -25,7 +25,7 @@
   },
   "DOCKER_TOTAL_CPU_USAGE": {
     "defaultAggregate": "avg",
-    "defaultResolutionMS": 1000,
+    "defaultResolutionMS": 60000,
     "description": "Total CPU usage",
     "displayName": "Docker total cpu usage",
     "displayNameShort": "DK TOTAL CPU",
@@ -33,7 +33,7 @@
   },
   "DOCKER_NETWORK_RX_BYTES": {
     "defaultAggregate": "avg",
-    "defaultResolutionMS": 1000,
+    "defaultResolutionMS": 60000,
     "description": "Docker network i/o RX",
     "displayName": "Docker network i/o RX",
     "displayNameShort": "DK TOTAL NET RX BYTES",
@@ -41,7 +41,7 @@
   },
   "DOCKER_NETWORK_TX_BYTES": {
     "defaultAggregate": "avg",
-    "defaultResolutionMS": 1000,
+    "defaultResolutionMS": 60000,
     "description": "Docker network i/o TX",
     "displayName": "Docker network i/o TX",
     "displayNameShort": "DK TOTAL NET TX BYTES",
@@ -49,7 +49,7 @@
   },
   "DOCKER_NETWORK_RX_PACKETS": {
     "defaultAggregate": "avg",
-    "defaultResolutionMS": 1000,
+    "defaultResolutionMS": 60000,
     "description": "Docker network RX packets",
     "displayName": "Docker network RX packets",
     "displayNameShort": "DK NET PCKTS RX",
@@ -57,7 +57,7 @@
   },
   "DOCKER_NETWORK_TX_PACKETS": {
     "defaultAggregate": "avg",
-    "defaultResolutionMS": 1000,
+    "defaultResolutionMS": 60000,
     "description": "Docker network TX packets",
     "displayName": "Docker network TX packets",
     "displayNameShort": "DK NET PCKTS TX",
@@ -65,7 +65,7 @@
   },
   "DOCKER_NETWORK_RX_ERRORS": {
     "defaultAggregate": "avg",
-    "defaultResolutionMS": 1000,
+    "defaultResolutionMS": 60000,
     "description": "Docker network RX errors",
     "displayName": "Docker network RX errors",
     "displayNameShort": "DK NET RX ERRORS",
@@ -73,7 +73,7 @@
   },
   "DOCKER_NETWORK_TX_ERRORS": {
     "defaultAggregate": "avg",
-    "defaultResolutionMS": 1000,
+    "defaultResolutionMS": 60000,
     "description": "Docker network TX errors",
     "displayName": "Docker network TX errors",
     "displayNameShort": "DK NET TX ERRORS",
@@ -81,7 +81,7 @@
   },
   "DOCKER_BLOCK_IO_READ_BYTES": {
     "defaultAggregate": "avg",
-    "defaultResolutionMS": 1000,
+    "defaultResolutionMS": 60000,
     "description": "Docker block io read bytes",
     "displayName": "Docker block io read bytes",
     "displayNameShort": "DK BLK IO READ",
@@ -89,7 +89,7 @@
   },
   "DOCKER_BLOCK_IO_WRITE_BYTES": {
     "defaultAggregate": "avg",
-    "defaultResolutionMS": 1000,
+    "defaultResolutionMS": 60000,
     "description": "Docker block io write bytes",
     "displayName": "Docker block io write bytes",
     "displayNameShort": "DK BLK IO WRITE",

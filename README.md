@@ -21,7 +21,7 @@ This plugin is compatible with Docker 1.7.1 or later.
 Docker must run in deamon mode binded to a host and port. You can do this running Docker with the following command line:
 
 ```
-$ sudo docker -H 127.0.0.0.1:2375 -d
+$ sudo docker -H 127.0.0.1:2375 -d
 ```
 
 Or edit the __/etc/default/docker__ and add __DOCKER_OPTS="-H 127.0.0.1:2375"__ then restart the service
