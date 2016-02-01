@@ -7,7 +7,7 @@ Collects metrics from the Docker daemon using the remote api.
 
 |     OS    | Linux | Windows | SmartOS | OS X |
 |:----------|:-----:|:-------:|:-------:|:----:|
-| Supported |   v   |    v    |    v    |  v   |
+| Supported |   v   |    -    |    -    |  -   |
 
 This plugin is compatible with Docker 1.7.1 or later.
 
