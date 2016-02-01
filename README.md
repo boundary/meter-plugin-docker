@@ -33,7 +33,7 @@ Edit the __/etc/default/docker__ and add __DOCKER_OPTS="-H 127.0.0.1:2375"__ & r
 $ sudo service docker restart
 ``` 
 
-#### For CentOS, RHEL & Fedora
+#### For CentOS, RHEL & Fedora:
 Edit the __/etc/sysconfig/docker__  and add __DOCKER_OPTS="-H 127.0.0.1:2375"__ & restart the service
 ```
 $ sudo service docker restart
