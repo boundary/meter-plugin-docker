@@ -18,17 +18,27 @@ This plugin is compatible with Docker 1.7.1 or later.
 
 ### Plugin Setup
 
-Docker must run in deamon mode binded to a host and port. You can do this running Docker with the following command line:
+Docker must run in deamon mode binded to a host and port. You can do this by running Docker with the following command line:
 
 ```
 $ sudo docker -H 127.0.0.1:2375 -d
 ```
 
-Or edit the __/etc/default/docker__ and add __DOCKER_OPTS="-H 127.0.0.1:2375"__ then restart the service
+Or, follow the instructions below:
 
+#### For Ubuntu:
+
+Edit the __/etc/default/docker__ and add __DOCKER_OPTS="-H 127.0.0.1:2375"__ & restart the service
 ```
 $ sudo service docker restart
 ``` 
+
+#### For CentOS, RHEL & Fedora
+Edit the __/etc/sysconfig/docker__  and add __DOCKER_OPTS="-H 127.0.0.1:2375"__ & restart the service
+```
+$ sudo service docker restart
+``` 
+
 
 ### Plugin Configuration Fields
 
