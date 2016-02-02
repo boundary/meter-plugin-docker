@@ -4,7 +4,7 @@
   "meterVersionRequired" : "4.2.0-611",
   "unsupportedPlatforms" : [ ],
   "tags" : "docker",
-  "description": "Docker Boundary Plugin",
+  "description": "Monitors Docker",
   "icon" : "icon.png",
   "command": "boundary-meter init.lua",
   "command_lua" : "boundary-meter init.lua",
