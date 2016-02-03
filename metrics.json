@@ -36,7 +36,7 @@
     "defaultResolutionMS": 60000,
     "description": "Docker network i/o RX",
     "displayName": "Docker network i/o RX",
-    "displayNameShort": "DK TOTAL NET RX BYTES",
+    "displayNameShort": "DK TOTAL NT RX BYTES",
     "unit": "bytecount"
   },
   "DOCKER_NETWORK_TX_BYTES": {
@@ -44,7 +44,7 @@
     "defaultResolutionMS": 60000,
     "description": "Docker network i/o TX",
     "displayName": "Docker network i/o TX",
-    "displayNameShort": "DK TOTAL NET TX BYTES",
+    "displayNameShort": "DK TOTAL NT TX BYTES",
     "unit": "bytecount"
   },
   "DOCKER_NETWORK_RX_PACKETS": {
