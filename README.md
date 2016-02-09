@@ -18,13 +18,7 @@ This plugin is compatible with Docker 1.7.1 or later.
 
 ### Plugin Setup
 
-Docker must run in deamon mode binded to a host and port. You can do this by running Docker with the following command line:
-
-```
-$ sudo docker -H 127.0.0.1:2375 -d
-```
-
-Or, follow the instructions below:
+Docker must run in deamon mode binded to a host and port. Follow the instructions below:
 
 #### For Ubuntu:
 
@@ -33,12 +27,43 @@ Edit __/etc/default/docker__ and add __DOCKER_OPTS="-H 127.0.0.1:2375"__ & resta
 $ sudo service docker restart
 ``` 
 
-#### For CentOS, RHEL & Fedora:
-Edit __/etc/sysconfig/docker__  and add __DOCKER_OPTS="-H 127.0.0.1:2375"__ & restart the service
+#### For CentOS 6.x, RHEL 6.x:
+Edit __/etc/sysconfig/docker__  and add __OPTIONS="-H 127.0.0.1:2375"__ & restart the service
 ```
 $ sudo service docker restart
 ``` 
 
+#### For CentOS 7.x, RHEL 7.x:
+1. Log into your host as a user with sudo or root privileges.
+2. Create the /etc/systemd/system/docker.service.d directory.
+
+  ```
+  $ sudo mkdir /etc/systemd/system/docker.service.d
+  ```
+3. Create a /etc/systemd/system/docker.service.d/docker.conf file.
+4. Open the file with your favorite editor.
+
+  ```
+  $ sudo vi /etc/systemd/system/docker.service.d/docker.conf
+  ```
+5. Override the ExecStart configuration from your docker.service file to customize the docker daemon. To modify the ExecStart configuration you have to specify an empty configuration followed by a new one as follows:
+
+  ```
+  [Service]
+  ExecStart=
+  ExecStart=/usr/bin/docker daemon -H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock
+  ```
+6. Save the changes
+7. Flush changes.
+
+  ```
+  $ sudo systemctl daemon-reload
+  ```
+8. Restart the docker daemon.
+
+  ```
+  $ sudo systemctl restart docker
+  ```
 
 ### Plugin Configuration Fields
 
