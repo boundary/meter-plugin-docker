@@ -27,13 +27,13 @@ Edit __/etc/default/docker__ and add __DOCKER_OPTS="-H 127.0.0.1:2375"__ & resta
 $ sudo service docker restart
 ``` 
 
-#### For CentOS 6.x, RHEL 6.x:
+#### For CentOS 6.x & RHEL 6.x:
 Edit __/etc/sysconfig/docker__  and add __OPTIONS="-H 127.0.0.1:2375"__ & restart the service
 ```
 $ sudo service docker restart
 ``` 
 
-#### For CentOS 7.x, RHEL 7.x:
+#### For CentOS 7.x & RHEL 7.x:
 1. Log into your host as a user with sudo or root privileges.
 2. Create the /etc/systemd/system/docker.service.d directory.
 
@@ -98,4 +98,4 @@ $ sudo service docker restart
 ### References
 
 https://docs.docker.com/reference/api/docker_remote_api/
-
+https://docs.docker.com/engine/admin/configuring/
