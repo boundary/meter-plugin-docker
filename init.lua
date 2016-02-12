@@ -33,6 +33,9 @@ local options = {}
 options.host = notEmpty(params.host, '127.0.0.1')
 options.port = notEmpty(params.port, '2375')
 options.path = '/v1.19/containers/json'
+-- Adding options to make the socket wait for the entire response.
+options.wait_for_end = true
+-- Done.
 
 local function getName(fullName)
   return string.sub(fullName, 2, -1)
