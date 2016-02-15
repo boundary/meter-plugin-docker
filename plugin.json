@@ -1,6 +1,6 @@
 {
   "name" : "Boundary Docker Plugin",
-  "version" : "0.9.3",
+  "version" : "0.9.4",
   "meterVersionRequired" : "4.2.0-611",
   "unsupportedPlatforms" : [ ],
   "tags" : "docker",
@@ -64,7 +64,7 @@
       "name": "pollInterval",
       "description": "The Poll Interval (in milliseconds) to poll for metrics.",
       "type": "integer",
-      "default": 60000,
+      "default": 10000,
       "required": false
     },
     {
